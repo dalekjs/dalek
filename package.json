@@ -1,0 +1,51 @@
+{
+  "name": "dalek",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./index.js",
+  "directories": {
+    "lib": ".",
+    "test": "test",
+    "example": "examples"
+  },
+   "dependencies": {
+    "optimist": "0.3.x",
+    "colors": "0.6.x",
+    "lodash": "1.0.x",
+    "q": "0.8.x",
+    "eventemitter2": "0.4.x",
+    "async": "0.1.x"
+  },
+  "devDependencies": {
+    "grunt": "0.4.x",
+    "grunt-contrib-clean": "0.4.x",
+    "grunt-contrib-jshint": "0.1.x",
+    "grunt-contrib-nodeunit": "0.1.x",
+    "grunt-contrib-yuidoc": "0.3.x"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+      "type": "git",
+      "url": "http://github.com/dalekjs/dalek.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dalekjs/dalek/issues"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Sebastian Golasch",
+    "email": "public@asciidisco.com",
+    "url": "http://asciidisco.com"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/dalekjs/dalek/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engine": {
+    "node": ">=0.8"
+  }
+}
