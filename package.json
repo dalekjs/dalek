@@ -17,6 +17,7 @@
     "json5": "0.2.x",
     "coffee-script": "1.4.x",
     "dalek-driver-native": "0.0.x",
+    "dalek-reporter-console": "0.0.x",
     "dalek-browser-phantomjs": "0.0.x"
   },
   "devDependencies": {
