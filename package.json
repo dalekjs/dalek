@@ -15,7 +15,9 @@
     "async": "0.1.x",
     "js-yaml": "1.0.x",
     "json5": "0.2.x",
-    "coffee-script": "1.4.x"
+    "coffee-script": "1.4.x",
+    "dalek-driver-native": "0.0.x",
+    "dalek-browser-phantomjs": "0.0.x"
   },
   "devDependencies": {
     "grunt": "0.4.x",
