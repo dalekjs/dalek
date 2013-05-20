@@ -1,6 +1,6 @@
 {
-  "name": "dalek",
-  "version": "0.1.0",
+  "name": "dalekjs",
+  "version": "0.0.1",
   "description": "",
   "main": "./index.js",
   "directories": {
@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/dalekjs/dalek/issues"
   },
-  "keywords": [],
+  "keywords": ["dalekjs"],
   "author": {
     "name": "Sebastian Golasch",
     "email": "public@asciidisco.com",

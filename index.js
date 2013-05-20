@@ -51,8 +51,8 @@ module.exports = function (opts) {
 
 var defaults = {
     reporter: ['console'],
-    driver: ['casperjs'],
-    browser: ['firefox'],
+    driver: ['native'],
+    browser: ['phantomjs'],
     logLevel: 1
 };
 
