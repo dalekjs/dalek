@@ -61,12 +61,6 @@ var defaults = {
  */
 
 function Dalek (opts) {
-  // check for given options, set defaults if option is not given
-  if (!_.isArray(opts.reporter) || opts.reporter.length === 0) opts.reporter = defaults.reporter;
-  if (!_.isArray(opts.driver) || opts.driver.length === 0) opts.driver = defaults.driver;
-  if (!_.isArray(opts.browser) || opts.browser.length === 0) opts.browser = defaults.browser;
-  if (!opts.logLevel) opts.logLevel = defaults.logLevel;
-
   // prepare error data
   this.warnings = [];
 
@@ -79,17 +73,16 @@ function Dalek (opts) {
   this.assertionsPassed = 0;
 
   // initiate config
-  this.config = Config(opts);
-
+  this.config = Config(defaults, opts);
   // check for file option, throw error if none is given
   if (!_.isArray(this.config.get('tests'))) throw 'No test files given';
 
   // prepare and load reporter(s)
   this.reporters = [];
   this.reporterEvents = new EventEmitter2();
-  this.options.reporter = this.config.verifyReporters(this.options.reporter, reporter);
+  this.options.reporter = this.config.verifyReporters(this.config.get('reporter'), reporter);
   this.options.reporter.forEach(function (mod) {
-    this.reporters.push(reporter.loadReporter(mod, {events: this.reporterEvents, logLevel: opts.logLevel}));
+    this.reporters.push(reporter.loadReporter(mod, {events: this.reporterEvents, logLevel: this.config.get('logLevel')}));
   }.bind(this));
 
   // count all passed & failed assertions
@@ -103,7 +96,7 @@ function Dalek (opts) {
   }.bind(this));
 
   // prepare and load driver
-  this.options.driver = this.config.verifyDrivers(this.options.driver, driver);
+  this.options.driver = this.config.verifyDrivers(this.config.get('driver'), driver);
 };
 
 /**
@@ -115,11 +108,11 @@ Dalek.prototype.run = function () {
   var driverEmitter = new EventEmitter2();
   driverEmitter.setMaxListeners(1000);
   this.driverEmitter = driverEmitter;
-  driver.browser = this.options.browser;
+  driver.browser = this.config.get('browser');
   driver.files = this.config.get('tests');
   driver.driverEmitter = driverEmitter;
   driver.reporterEvents = this.reporterEvents;
-  driver.drivers = this.options.driver;
+  driver.drivers = this.config.get('driver');
 
   // start the timer to measure the execution time
   timer.start();
