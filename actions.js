@@ -39,7 +39,7 @@ var reporter = null;
  * @api
  */
 
-function Actions (opts) {
+var Actions = function () {
   this.uuids = {};
 };
 
@@ -47,7 +47,7 @@ function Actions (opts) {
  * Selector helper
  */
 
-Actions.prototype.$ = Actions.prototype.query = function (selector) {
+Actions.prototype.$ = Actions.prototype.query = function () {
   return this;
 };
 
@@ -541,7 +541,7 @@ Actions.prototype.waitForElement = function (selector, timeout) {
  * @private
  */
 
-Actions.prototype._generateCallbackAssertion = function (key, type, value, hash, opts) {
+Actions.prototype._generateCallbackAssertion = function (key, type) {
   var cb = function (data) {
     if (data && data.key === key && !this.uuids[data.uuid]) {
       if ((data && data.value) || data.value === null) {
