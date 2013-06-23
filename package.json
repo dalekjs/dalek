@@ -9,23 +9,34 @@
     "example": "examples"
   },
    "dependencies": {
-    "lodash": "1.0.x",
-    "q": "0.8.x",
-    "eventemitter2": "0.4.x",
-    "async": "0.1.x",
-    "js-yaml": "1.0.x",
-    "json5": "0.2.x",
-    "coffee-script": "1.4.x",
-    "dalek-driver-native": "0.0.x",
-    "dalek-reporter-console": "0.0.x",
-    "dalek-browser-phantomjs": "0.0.x"
+    "lodash": "~1.3.1",
+    "q": "~0.9.6",
+    "eventemitter2": "~0.4.12",
+    "async": "~0.2.9",
+    "js-yaml": "~2.1.0",
+    "json5": "~0.2.0",
+    "coffee-script": "~1.6.3",
+    "dalek-driver-native": "~0.0.1",
+    "dalek-reporter-console": "~0.0.1",
+    "dalek-browser-phantomjs": "~0.0.1",
+    "dalek-internal-assertions": "~0.0.1",
+    "dalek-internal-actions": "~0.0.1"
   },
   "devDependencies": {
-    "grunt": "0.4.x",
-    "grunt-contrib-clean": "0.4.x",
-    "grunt-contrib-jshint": "0.1.x",
-    "grunt-contrib-nodeunit": "0.1.x",
-    "grunt-contrib-yuidoc": "0.3.x"
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-yuidoc": "~0.4.0",
+    "grunt-contrib-compress": "~0.5.2",
+    "grunt-mocha-test": "~0.5.0",
+    "grunt-complexity": "~0.1.3",
+    "grunt-plato": "~0.2.0",
+    "grunt-documantix": "~0.0.1",
+    "blanket": "~1.1.5",
+    "chai": "~1.7.0"
+  },
+  "peerDependencies": {
+    "dalekjs": "~0.0.1"
   },
   "scripts": {
     "test": "grunt test"
