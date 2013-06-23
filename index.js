@@ -30,18 +30,17 @@ var async = require('async');
 var EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 // int. libs
-var clients = require('./lib/clients')();
 var driver = require('./lib/driver')();
 var reporter = require('./lib/reporter')();
 var timer = require('./lib/timer')();
-var Config = require('./lib/config');
+var config = require('./lib/config');
 
 /**
  * @module
  */
-
+var Dalek;
 module.exports = function (opts) {
-    return new Dalek(opts);
+  return new Dalek(opts);
 };
 
 /**
@@ -50,19 +49,20 @@ module.exports = function (opts) {
  */
 
 var defaults = {
-    reporter: ['console'],
-    driver: ['native'],
-    browser: ['phantomjs'],
-    logLevel: 1
+  reporter: ['console'],
+  driver: ['native'],
+  browser: ['phantomjs'],
+  logLevel: 1
 };
 
 /**
  * @constructor
  */
 
-function Dalek (opts) {
+Dalek = function (opts) {
   // prepare error data
   this.warnings = [];
+  this.errors = [];
 
   // normalize options
   this.options = this.normalizeOptions(opts);
@@ -73,9 +73,11 @@ function Dalek (opts) {
   this.assertionsPassed = 0;
 
   // initiate config
-  this.config = Config(defaults, opts);
+  this.config = config(defaults, opts);
   // check for file option, throw error if none is given
-  if (!_.isArray(this.config.get('tests'))) throw 'No test files given';
+  if (!_.isArray(this.config.get('tests'))) {
+    throw 'No test files given';
+  }
 
   // prepare and load reporter(s)
   this.reporters = [];
@@ -104,15 +106,20 @@ function Dalek (opts) {
  */
 
 Dalek.prototype.run = function () {
-  // prepare
+  // prepare driver event emitter instance
   var driverEmitter = new EventEmitter2();
   driverEmitter.setMaxListeners(1000);
   this.driverEmitter = driverEmitter;
+
+  // add configuration data to the driver instance
+  driver.config = this.config;
   driver.browser = this.config.get('browser');
   driver.files = this.config.get('tests');
-  driver.driverEmitter = driverEmitter;
-  driver.reporterEvents = this.reporterEvents;
   driver.drivers = this.config.get('driver');
+
+  // link driver events
+  driver.driverEmitter = this.driverEmitter;
+  driver.reporterEvents = this.reporterEvents;
 
   // start the timer to measure the execution time
   timer.start();
@@ -129,7 +136,7 @@ Dalek.prototype.run = function () {
  *
  */
 
-Dalek.prototype.testsuitesFinished = function (err, results) {
+Dalek.prototype.testsuitesFinished = function () {
   this.driverEmitter.emit('tests:complete');
   setTimeout(this.reportRunFinished.bind(this), 0);
   return this;
@@ -151,8 +158,10 @@ Dalek.prototype.reportRunFinished = function () {
 
 /**
  * Normalizes options
- * @param  {[type]} options [description]
- * @return {[type]}         [description]
+ *
+ * @method normalizeOptions
+ * @param {object} options Raaw options
+ * @return {object} Normalized options
  */
 
 Dalek.prototype.normalizeOptions = function (options) {
@@ -171,5 +180,14 @@ Dalek.prototype.normalizeOptions = function (options) {
 
 Dalek.prototype.setWarning = function (type, message, code, value) {
   this.warnings.push({type: type, message: message, code: code, value: value});
+  return this;
+};
+
+/**
+ *
+ */
+
+Dalek.prototype.setError = function (type, message, code, value) {
+  this.errors.push({type: type, message: message, code: code, value: value});
   return this;
 };
