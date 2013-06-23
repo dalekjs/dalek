@@ -1,8 +1,0 @@
-.npmignore
-.jshintrc
-.editorconfig
-.gitattributes
-.gitignore
-.travis.yml
-test
-Grunfile.js
