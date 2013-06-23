@@ -1,7 +1,12 @@
-var config = require('../lib/config');
+'use strict';
 
-exports.testSomething = function(test){
-    test.expect(1);
-    test.ok(true, "this assertion should pass");
-    test.done();
-};
+var expect = require('chai').expect;
+
+describe('dalek', function() {
+
+  it('should get default config filename', function(){
+    var config = require('../lib/config')({}, {config: {}, tests: []});
+    expect(config.defaultFilename).to.equal('Dalekfile');
+  });
+
+});
