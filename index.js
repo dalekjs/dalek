@@ -30,7 +30,7 @@ var async = require('async');
 var EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 // int. libs
-var driver = require('./lib/driver')();
+var Driver = require('./lib/driver');
 var reporter = require('./lib/reporter')();
 var timer = require('./lib/timer')();
 var config = require('./lib/config');
@@ -39,9 +39,7 @@ var config = require('./lib/config');
  * @module
  */
 var Dalek;
-module.exports = function (opts) {
-  return new Dalek(opts);
-};
+
 
 /**
  * Default options
@@ -97,8 +95,19 @@ Dalek = function (opts) {
     }
   }.bind(this));
 
-  // prepare and load driver
-  this.options.driver = this.config.verifyDrivers(this.config.get('driver'), driver);
+  // prepare driver event emitter instance
+  var driverEmitter = new EventEmitter2();
+  driverEmitter.setMaxListeners(1000);
+  this.driverEmitter = driverEmitter;
+
+  // init the driver instance
+  this.driver = new Driver({
+    config: this.config,
+    driverEmitter: this.driverEmitter,
+    reporterEvents: this.reporterEvents
+  });
+
+  this.options.driver = this.config.verifyDrivers(this.config.get('driver'), this.driver);
 };
 
 /**
@@ -106,21 +115,6 @@ Dalek = function (opts) {
  */
 
 Dalek.prototype.run = function () {
-  // prepare driver event emitter instance
-  var driverEmitter = new EventEmitter2();
-  driverEmitter.setMaxListeners(1000);
-  this.driverEmitter = driverEmitter;
-
-  // add configuration data to the driver instance
-  driver.config = this.config;
-  driver.browser = this.config.get('browser');
-  driver.files = this.config.get('tests');
-  driver.drivers = this.config.get('driver');
-
-  // link driver events
-  driver.driverEmitter = this.driverEmitter;
-  driver.reporterEvents = this.reporterEvents;
-
   // start the timer to measure the execution time
   timer.start();
 
@@ -128,7 +122,7 @@ Dalek.prototype.run = function () {
   this.reporterEvents.emit('report:runner:started');
 
   // execute all given drivers sequentially
-  var drivers = driver.getDrivers();
+  var drivers = this.driver.getDrivers();
   async.series(drivers, this.testsuitesFinished.bind(this));
 };
 
@@ -190,4 +184,9 @@ Dalek.prototype.setWarning = function (type, message, code, value) {
 Dalek.prototype.setError = function (type, message, code, value) {
   this.errors.push({type: type, message: message, code: code, value: value});
   return this;
+};
+
+// export dalek as a module
+module.exports = function (opts) {
+  return new Dalek(opts);
 };
