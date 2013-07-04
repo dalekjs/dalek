@@ -32,7 +32,7 @@ var EventEmitter2 = require('eventemitter2').EventEmitter2;
 // int. libs
 var Driver = require('./lib/driver');
 var reporter = require('./lib/reporter')();
-var timer = require('./lib/timer')();
+var Timer = require('./lib/timer');
 var config = require('./lib/config');
 
 /**
@@ -72,6 +72,7 @@ Dalek = function (opts) {
 
   // initiate config
   this.config = config(defaults, opts);
+
   // check for file option, throw error if none is given
   if (!_.isArray(this.config.get('tests'))) {
     throw 'No test files given';
@@ -95,6 +96,9 @@ Dalek = function (opts) {
     }
   }.bind(this));
 
+  // init the timer instance
+  this.timer = new Timer();
+
   // prepare driver event emitter instance
   var driverEmitter = new EventEmitter2();
   driverEmitter.setMaxListeners(1000);
@@ -116,7 +120,7 @@ Dalek = function (opts) {
 
 Dalek.prototype.run = function () {
   // start the timer to measure the execution time
-  timer.start();
+  this.timer.start();
 
   // emit the runner started event
   this.reporterEvents.emit('report:runner:started');
@@ -142,7 +146,7 @@ Dalek.prototype.testsuitesFinished = function () {
 
 Dalek.prototype.reportRunFinished = function () {
   this.reporterEvents.emit('report:runner:finished', {
-    elapsedTime: timer.stop().getElapsedTimeFormatted(),
+    elapsedTime: this.timer.stop().getElapsedTimeFormatted(),
     assertions: this.assertionsFailed + this.assertionsPassed,
     assertionsFailed: this.assertionsFailed,
     assertionsPassed: this.assertionsPassed,
