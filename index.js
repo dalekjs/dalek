@@ -31,7 +31,7 @@ var EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 // int. libs
 var Driver = require('./lib/driver');
-var reporter = require('./lib/reporter')();
+var Reporter = require('./lib/reporter');
 var Timer = require('./lib/timer');
 var config = require('./lib/config');
 
@@ -81,9 +81,9 @@ Dalek = function (opts) {
   // prepare and load reporter(s)
   this.reporters = [];
   this.reporterEvents = new EventEmitter2();
-  this.options.reporter = this.config.verifyReporters(this.config.get('reporter'), reporter);
+  this.options.reporter = this.config.verifyReporters(this.config.get('reporter'), Reporter);
   this.options.reporter.forEach(function (mod) {
-    this.reporters.push(reporter.loadReporter(mod, {events: this.reporterEvents, logLevel: this.config.get('logLevel')}));
+    this.reporters.push(Reporter.loadReporter(mod, {events: this.reporterEvents, logLevel: this.config.get('logLevel')}));
   }.bind(this));
 
   // count all passed & failed assertions
