@@ -36,12 +36,6 @@ var Timer = require('./lib/timer');
 var Config = require('./lib/config');
 
 /**
- * @module
- */
-var Dalek;
-
-
-/**
  * Default options
  * @type {Object}
  */
@@ -50,147 +44,264 @@ var defaults = {
   reporter: ['console'],
   driver: ['native'],
   browser: ['phantomjs'],
-  logLevel: 1
+  logLevel: 3
 };
 
 /**
+ * Setup all the options needed to configure dalek
+ *
+ * @param {options} opts Configuration options
  * @constructor
  */
 
-Dalek = function (opts) {
-  // prepare error data
-  this.warnings = [];
-  this.errors = [];
+var Dalek = function (opts) {
+  // setup instance
+  this._initialize();
 
   // normalize options
   this.options = this.normalizeOptions(opts);
-
-  // prepare state data for the complete test run
-  this.runnerStatus = true;
-  this.assertionsFailed = 0;
-  this.assertionsPassed = 0;
 
   // initiate config
   this.config = new Config(defaults, this.options);
 
   // check for file option, throw error if none is given
   if (!_.isArray(this.config.get('tests'))) {
-    throw 'No test files given';
+    console.error('No test files given');
+    process.exit(0);
   }
 
   // prepare and load reporter(s)
-  this.reporters = [];
-  this.reporterEvents = new EventEmitter2();
-  this.options.reporter = this.config.verifyReporters(this.config.get('reporter'), Reporter);
-  this.options.reporter.forEach(function (mod) {
-    this.reporters.push(Reporter.loadReporter(mod, {events: this.reporterEvents, logLevel: this.config.get('logLevel')}));
-  }.bind(this));
+  this._setupReporters();
 
   // count all passed & failed assertions
-  this.reporterEvents.on('report:assertion', function (assertion) {
+  this.reporterEvents.on('report:assertion', this._onReportAssertion.bind(this));
+
+  // init the timer instance
+  this.timer = new Timer();
+
+  // prepare driver event emitter instance
+  this._setupDriverEmitter();
+
+  // init the driver instance
+  this._initDriver();
+};
+
+/**
+ * Daleks base module
+ * Used to configure all the things
+ * and to start off the tests
+ *
+ * @module DalekJS
+ * @class Dalek
+ */
+
+Dalek.prototype = {
+
+  /**
+   * Runs the configured testsuites
+   *
+   * @method run
+   * @chainable
+   */
+
+  run: function () {
+    // start the timer to measure the execution time
+    this.timer.start();
+
+    // emit the runner started event
+    this.reporterEvents.emit('report:runner:started');
+
+    // execute all given drivers sequentially
+    var drivers = this.driver.getDrivers();
+    async.series(drivers, this.testsuitesFinished.bind(this));
+    return this;
+  },
+
+  /**
+   * Reports the all testuites executed event
+   *
+   * @method testsuitesFinished
+   * @chainable
+   */
+
+  testsuitesFinished: function () {
+    this.driverEmitter.emit('tests:complete');
+    setTimeout(this.reportRunFinished.bind(this), 0);
+    return this;
+  },
+
+  /**
+   * Reports the all testuites executed event
+   *
+   * @method reportRunFinished
+   * @chainable
+   */
+
+  reportRunFinished: function () {
+    this.reporterEvents.emit('report:runner:finished', {
+      elapsedTime: this.timer.stop().getElapsedTimeFormatted(),
+      assertions: this.assertionsFailed + this.assertionsPassed,
+      assertionsFailed: this.assertionsFailed,
+      assertionsPassed: this.assertionsPassed,
+      status: this.runnerStatus
+    });
+    return this;
+  },
+
+  /**
+   * Normalizes options
+   *
+   * @method normalizeOptions
+   * @param {object} options Raw options
+   * @return {object} Normalized options
+   */
+
+  normalizeOptions: function (options) {
+    _(options).forEach(function (val, key) {
+      if ({reporter: 1, driver: 1}[key]) {
+        options[key] = _.map(val, function (input) { return input.trim(); });
+      }
+    });
+
+    return options;
+  },
+
+  /**
+   * Reports a system warning
+   *
+   * @method setWarning
+   * @param {string} type Type of the warning
+   * @param {string} message Verbose message of the warning
+   * @param {integer} code Error code of the warning
+   * @param {string} value Custom error message
+   * @chainable
+   */
+
+  setWarning: function (type, message, code, value) {
+    this.warnings.push({type: type, message: message, code: code, value: value});
+    return this;
+  },
+
+  /**
+   * Reports a system error
+   *
+   * @method setError
+   * @param {string} type Type of the error
+   * @param {string} message Verbose message of the error
+   * @param {integer} code Error code of the error
+   * @param {string} value Custom error message
+   * @chainable
+   */
+
+  setError: function (type, message, code, value) {
+    this.errors.push({type: type, message: message, code: code, value: value});
+    return this;
+  },
+
+  /**
+   * Sets up system env properties
+   *
+   * @method _initialize
+   * @chainable
+   * @private
+   */
+
+  _initialize: function () {
+    // prepare error data
+    this.warnings = [];
+    this.errors = [];
+
+    // prepare state data for the complete test run
+    this.runnerStatus = true;
+    this.assertionsFailed = 0;
+    this.assertionsPassed = 0;
+
+    return this;
+  },
+
+  /**
+   * Sets up all the reporters
+   *
+   * @method _setupReporters
+   * @chainable
+   * @private
+   */
+
+  _setupReporters: function () {
+    this.reporters = [];
+    this.reporterEvents = new EventEmitter2();
+    this.options.reporter = this.config.verifyReporters(this.config.get('reporter'), Reporter);
+    this.options.reporter.forEach(this._addReporter, this);
+    return this
+  },
+
+  /**
+   * Adds a reporter
+   *
+   * @method _addReporter
+   * @param {string} reporter Name of the reporter to add
+   * @chainable
+   * @private
+   */
+
+  _addReporter: function (reporter) {
+    this.reporters.push(Reporter.loadReporter(reporter, {events: this.reporterEvents, logLevel: this.config.get('logLevel')}));
+    return this;
+  },
+
+  /**
+   * Updates the assertion state
+   *
+   * @method _onReportAssertion
+   * @param {object} assertion Informations aout the runned assertions
+   * @chainable
+   * @private
+   */
+
+  _onReportAssertion: function (assertion) {
     if (assertion.success) {
       this.assertionsPassed++;
     } else {
       this.runnerStatus = false;
       this.assertionsFailed++;
     }
-  }.bind(this));
+    return this;
+  },
 
-  // init the timer instance
-  this.timer = new Timer();
+  /**
+   * Initizializes the driver instances
+   *
+   * @method _initDriver
+   * @chainable
+   * @private
+   */
 
-  // prepare driver event emitter instance
-  var driverEmitter = new EventEmitter2();
-  driverEmitter.setMaxListeners(1000);
-  this.driverEmitter = driverEmitter;
+  _initDriver: function () {
+    this.driver = new Driver({
+      config: this.config,
+      driverEmitter: this.driverEmitter,
+      reporterEvents: this.reporterEvents
+    });
 
-  // init the driver instance
-  this.driver = new Driver({
-    config: this.config,
-    driverEmitter: this.driverEmitter,
-    reporterEvents: this.reporterEvents
-  });
+    this.options.driver = this.config.verifyDrivers(this.config.get('driver'), this.driver);
+    return this;
+  },
 
-  this.options.driver = this.config.verifyDrivers(this.config.get('driver'), this.driver);
-};
+  /**
+   * Sets up the event dispatcher for driver events
+   *
+   * @method _setupDriverEmitter
+   * @chainable
+   * @private
+   */
 
-/**
- *
- */
-
-Dalek.prototype.run = function () {
-  // start the timer to measure the execution time
-  this.timer.start();
-
-  // emit the runner started event
-  this.reporterEvents.emit('report:runner:started');
-
-  // execute all given drivers sequentially
-  var drivers = this.driver.getDrivers();
-  async.series(drivers, this.testsuitesFinished.bind(this));
-};
-
-/**
- *
- */
-
-Dalek.prototype.testsuitesFinished = function () {
-  this.driverEmitter.emit('tests:complete');
-  setTimeout(this.reportRunFinished.bind(this), 0);
-  return this;
-};
-
-/**
- *
- */
-
-Dalek.prototype.reportRunFinished = function () {
-  this.reporterEvents.emit('report:runner:finished', {
-    elapsedTime: this.timer.stop().getElapsedTimeFormatted(),
-    assertions: this.assertionsFailed + this.assertionsPassed,
-    assertionsFailed: this.assertionsFailed,
-    assertionsPassed: this.assertionsPassed,
-    status: this.runnerStatus
-  });
-};
-
-/**
- * Normalizes options
- *
- * @method normalizeOptions
- * @param {object} options Raaw options
- * @return {object} Normalized options
- */
-
-Dalek.prototype.normalizeOptions = function (options) {
-  _(options).forEach(function (val, key) {
-    if ({reporter: 1, driver: 1}[key]) {
-      options[key] = _.map(val, function (input) { return input.trim(); });
-    }
-  });
-
-  return options;
-};
-
-/**
- *
- */
-
-Dalek.prototype.setWarning = function (type, message, code, value) {
-  this.warnings.push({type: type, message: message, code: code, value: value});
-  return this;
-};
-
-/**
- *
- */
-
-Dalek.prototype.setError = function (type, message, code, value) {
-  this.errors.push({type: type, message: message, code: code, value: value});
-  return this;
+  _setupDriverEmitter: function () {
+    var driverEmitter = new EventEmitter2();
+    driverEmitter.setMaxListeners(1000);
+    this.driverEmitter = driverEmitter;
+    return this;
+  }
 };
 
 // export dalek as a module
-module.exports = function (opts) {
-  return new Dalek(opts);
-};
+module.exports = Dalek;
