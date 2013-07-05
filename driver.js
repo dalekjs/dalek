@@ -28,7 +28,7 @@
 var async = require('async');
 
 // int. libs
-var Testsuite = require('./testsuite');
+var Testsuite = require('dalek-internal-testsuite');
 
 /**
  * Configures the driver instance
