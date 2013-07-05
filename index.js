@@ -25,15 +25,14 @@
 'use strict';
 
 // ext. libs
-var _ = require('lodash');
 var async = require('async');
 var EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 // int. libs
-var Driver = require('./lib/driver');
-var Reporter = require('./lib/reporter');
-var Timer = require('./lib/timer');
-var Config = require('./lib/config');
+var Driver = require('dalek-internal-driver');
+var Reporter = require('dalek-internal-reporter');
+var Timer = require('dalek-internal-timer');
+var Config = require('dalek-internal-config');
 
 /**
  * Default options
@@ -65,7 +64,7 @@ var Dalek = function (opts) {
   this.config = new Config(defaults, this.options);
 
   // check for file option, throw error if none is given
-  if (!_.isArray(this.config.get('tests'))) {
+  if (!Array.isArray(this.config.get('tests'))) {
     console.error('No test files given');
     process.exit(0);
   }
@@ -159,7 +158,7 @@ Dalek.prototype = {
   normalizeOptions: function (options) {
     _(options).forEach(function (val, key) {
       if ({reporter: 1, driver: 1}[key]) {
-        options[key] = _.map(val, function (input) { return input.trim(); });
+        options[key] = val.map(function (input) { return input.trim(); });
       }
     });
 

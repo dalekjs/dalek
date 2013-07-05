@@ -1,7 +1,7 @@
 {
   "name": "dalekjs",
   "version": "0.0.1",
-  "description": "",
+  "description": "A node based cross browser testing tool",
   "main": "./index.js",
   "directories": {
     "lib": ".",
@@ -9,18 +9,17 @@
     "example": "examples"
   },
    "dependencies": {
-    "lodash": "~1.3.1",
-    "q": "~0.9.6",
-    "eventemitter2": "~0.4.12",
     "async": "~0.2.9",
-    "js-yaml": "~2.1.0",
-    "json5": "~0.2.0",
-    "coffee-script": "~1.6.3",
+    "eventemitter2": "~0.4.12",
+    "dalek-internal-assertions": "~0.0.1",
+    "dalek-internal-actions": "~0.0.1",
+    "dalek-internal-config": "~0.0.1",
+    "dalek-internal-driver": "~0.0.1",
+    "dalek-internal-reporter": "~0.0.1",
+    "dalek-internal-timer": "~0.0.1",
     "dalek-driver-native": "~0.0.1",
     "dalek-reporter-console": "~0.0.1",
-    "dalek-browser-phantomjs": "~0.0.1",
-    "dalek-internal-assertions": "~0.0.1",
-    "dalek-internal-actions": "~0.0.1"
+    "dalek-browser-phantomjs": "~0.0.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
