@@ -156,9 +156,9 @@ Dalek.prototype = {
    */
 
   normalizeOptions: function (options) {
-    _(options).forEach(function (val, key) {
+    Object.keys(options).forEach(function (key) {
       if ({reporter: 1, driver: 1}[key]) {
-        options[key] = val.map(function (input) { return input.trim(); });
+        options[key] = options[key].map(function (input) { return input.trim(); });
       }
     });
 
