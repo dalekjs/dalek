@@ -33,7 +33,7 @@ var EventEmitter2 = require('eventemitter2').EventEmitter2;
 var Driver = require('./lib/driver');
 var Reporter = require('./lib/reporter');
 var Timer = require('./lib/timer');
-var config = require('./lib/config');
+var Config = require('./lib/config');
 
 /**
  * @module
@@ -71,7 +71,7 @@ Dalek = function (opts) {
   this.assertionsPassed = 0;
 
   // initiate config
-  this.config = config(defaults, opts);
+  this.config = new Config(defaults, this.options);
 
   // check for file option, throw error if none is given
   if (!_.isArray(this.config.get('tests'))) {
