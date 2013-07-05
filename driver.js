@@ -98,7 +98,7 @@ Driver.prototype = {
    */
 
   getDrivers: function () {
-    return this.drivers.map(this.getVerifiedBrowser, this);
+    return this.drivers.map(this.getVerifiedBrowser, this)[0];
   },
 
   /**
@@ -110,7 +110,7 @@ Driver.prototype = {
    */
 
   getVerifiedBrowser: function (driver) {
-    return this.browser.map(this.getVerifiedDriver.bind(this, this.loadDriver(driver), driver))[0];
+    return this.browser.map(this.getVerifiedDriver.bind(this, this.loadDriver(driver), driver));
   },
 
   /**
@@ -120,7 +120,7 @@ Driver.prototype = {
    * @param {object} driverModule Instance of the used driver
    * @param {string} driver Name of ther used driver
    * @param {string} browser Name of the used browser
-   * @return {function}
+   * @return {function} run Function that kicks off execution of a testsuite chain in a browser
    */
 
   getVerifiedDriver: function (driverModule, driver, browser) {
