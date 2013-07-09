@@ -231,7 +231,7 @@ Dalek.prototype = {
     this.reporterEvents = new EventEmitter2();
     this.options.reporter = this.config.verifyReporters(this.config.get('reporter'), Reporter);
     this.options.reporter.forEach(this._addReporter, this);
-    return this
+    return this;
   },
 
   /**
