@@ -65,8 +65,6 @@ Config.prototype = {
    */
 
   checkAvailabilityOfConfigFile: function (pathname) {
-    var configFilePath = null;
-
     // check if a pathname is given,
     // then check if the file is available
     if (pathname && fs.existsSync(pathname)) {
@@ -87,7 +85,7 @@ Config.prototype = {
    * @private
    */
 
-   _checkFile: function (previousValue, ext) {
+  _checkFile: function (previousValue, ext) {
     var fileToCheck = this.defaultFilename + '.' + ext;
     if (fs.existsSync(fileToCheck)) {
       return fs.realpathSync(fileToCheck);
