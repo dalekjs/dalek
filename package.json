@@ -4,7 +4,6 @@
   "description": "A node based cross browser testing tool",
   "main": "./index.js",
   "directories": {
-    "lib": ".",
     "test": "test",
     "example": "examples"
   },
@@ -14,10 +13,7 @@
     "dalek-internal-config": "~0.0.1",
     "dalek-internal-driver": "~0.0.1",
     "dalek-internal-reporter": "~0.0.1",
-    "dalek-internal-timer": "~0.0.1",
-    "dalek-driver-native": "~0.0.1",
-    "dalek-reporter-console": "~0.0.1",
-    "dalek-browser-phantomjs": "~0.0.1"
+    "dalek-internal-timer": "~0.0.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
