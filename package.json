@@ -7,13 +7,9 @@
     "test": "test",
     "example": "examples"
   },
-   "dependencies": {
+  "dependencies": {
     "async": "~0.2.9",
-    "eventemitter2": "~0.4.12",
-    "dalek-internal-config": "~0.0.1",
-    "dalek-internal-driver": "~0.0.1",
-    "dalek-internal-reporter": "~0.0.1",
-    "dalek-internal-timer": "~0.0.1"
+    "eventemitter2": "~0.4.12"
   },
   "devDependencies": {
     "grunt": "~0.4.1"
