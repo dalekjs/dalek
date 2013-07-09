@@ -232,7 +232,6 @@ Driver.prototype = {
    * Will be called when the driver is ready
    *
    * @method _onDriverReadyclear
-   *
    * @param {string} browser Name of the requested browser
    * @param {string} driverName Name of the requested driver
    * @param {function} callback Asyncs next() callback function
