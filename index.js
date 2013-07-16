@@ -588,39 +588,7 @@ Assertions.prototype.attr = function (selector, attribute, expected, message) {
  */
 
 Assertions.prototype.is = function (expected, message) {
-  var gen = this._lastGeneratedShit;
-
-  this.test.actionPromiseQueue.push(function () {
-    var deferredAction = Q.defer();
-    deferredAction.resolve();
-    this.test.driver.events.on('driver:message', function () {
-
-      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'is']) {
-          var testResult = this._testShallowEquals(expected, this.test._lastGeneratedAction.data.value);
-
-          this.proceeded[this.test._lastGeneratedAction.hash + 'is'] = true;
-
-          this.test.reporter.emit('report:assertion', {
-            success: testResult,
-            expected: expected,
-            value: this.test._lastGeneratedAction.data.value,
-            message: message,
-            type: this.test._lastGeneratedAction.type
-          });
-
-          this.test.incrementExpectations();
-
-          if (!testResult) {
-            this.test.incrementFailedAssertions();
-          }
-        }
-      }
-    }.bind(this));
-    return deferredAction.promise;
-  }.bind(this));
-
-  return this.chaining ? this : this.test;
+  return this.generateTestHelper('is', '_testShallowEquals', false)(expected, message);
 };
 
 
@@ -629,37 +597,7 @@ Assertions.prototype.is = function (expected, message) {
  */
 
 Assertions.prototype.not = function (expected, message) {
-  var gen = this._lastGeneratedShit;
-
-  this.test.actionPromiseQueue.push(function () {
-    var deferredAction = Q.defer();
-    deferredAction.resolve();
-    this.test.driver.events.on('driver:message', function () {
-      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'not']) {
-          var testResult = this._testShallowEquals(expected, this.test._lastGeneratedAction.data.value);
-
-          this.proceeded[this.test._lastGeneratedAction.hash + 'not'] = true;
-
-          this.test.reporter.emit('report:assertion', {
-            success: !testResult,
-            expected: expected,
-            value: this.test._lastGeneratedAction.data.value,
-            message: message,
-            type: this.test._lastGeneratedAction.type
-          });
-
-          this.test.incrementExpectations();
-          if (!!testResult) {
-            this.test.incrementFailedAssertions();
-          }
-        }
-      }
-    }.bind(this));
-    return deferredAction.promise;
-  }.bind(this));
-
-  return this.chaining ? this : this.test;
+  return this.generateTestHelper('not', '_testShallowEquals', true)(expected, message);
 };
 
 /**
@@ -667,37 +605,7 @@ Assertions.prototype.not = function (expected, message) {
  */
 
 Assertions.prototype.between = function (expected, message) {
-  var gen = this._lastGeneratedShit;
-
-  this.test.actionPromiseQueue.push(function () {
-    var deferredAction = Q.defer();
-    deferredAction.resolve();
-    this.test.driver.events.on('driver:message', function () {
-      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'between']) {
-          var testResult = this._testBetween(expected, this.test._lastGeneratedAction.data.value);
-
-          this.proceeded[this.test._lastGeneratedAction.hash + 'between'] = true;
-
-          this.test.reporter.emit('report:assertion', {
-            success: testResult,
-            expected: expected,
-            value: this.test._lastGeneratedAction.data.value,
-            message: message,
-            type: this.test._lastGeneratedAction.type
-          });
-
-          this.test.incrementExpectations();
-          if (!testResult) {
-            this.test.incrementFailedAssertions();
-          }
-        }
-      }
-    }.bind(this));
-    return deferredAction.promise;
-  }.bind(this));
-
-  return this.chaining ? this : this.test;
+  return this.generateTestHelper('between', '_testBetween', false)(expected, message);
 };
 
 /**
@@ -705,37 +613,7 @@ Assertions.prototype.between = function (expected, message) {
  */
 
 Assertions.prototype.gt = function (expected, message) {
-  var gen = this._lastGeneratedShit;
-
-  this.test.actionPromiseQueue.push(function () {
-    var deferredAction = Q.defer();
-    deferredAction.resolve();
-    this.test.driver.events.on('driver:message', function () {
-      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'gt']) {
-          var testResult = this._testGreaterThan(expected, this.test._lastGeneratedAction.data.value);
-
-          this.proceeded[this.test._lastGeneratedAction.hash + 'gt'] = true;
-
-          this.test.reporter.emit('report:assertion', {
-            success: testResult,
-            expected: expected,
-            value: this.test._lastGeneratedAction.data.value,
-            message: message,
-            type: this.test._lastGeneratedAction.type
-          });
-
-          this.test.incrementExpectations();
-          if (!testResult) {
-            this.test.incrementFailedAssertions();
-          }
-        }
-      }
-    }.bind(this));
-    return deferredAction.promise;
-  }.bind(this));
-
-  return this.chaining ? this : this.test;
+  return this.generateTestHelper('gt', '_testGreaterThan', false)(expected, message);
 };
 
 /**
@@ -743,37 +621,7 @@ Assertions.prototype.gt = function (expected, message) {
  */
 
 Assertions.prototype.gte = function (expected, message) {
-  var gen = this._lastGeneratedShit;
-
-  this.test.actionPromiseQueue.push(function () {
-    var deferredAction = Q.defer();
-    deferredAction.resolve();
-    this.test.driver.events.on('driver:message', function () {
-      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'gte']) {
-          var testResult = this._testGreaterThan(expected - 1, this.test._lastGeneratedAction.data.value);
-
-          this.proceeded[this.test._lastGeneratedAction.hash + 'gte'] = true;
-
-          this.test.reporter.emit('report:assertion', {
-            success: testResult,
-            expected: expected,
-            value: this.test._lastGeneratedAction.data.value,
-            message: message,
-            type: this.test._lastGeneratedAction.type
-          });
-
-          this.test.incrementExpectations();
-          if (!testResult) {
-            this.test.incrementFailedAssertions();
-          }
-        }
-      }
-    }.bind(this));
-    return deferredAction.promise;
-  }.bind(this));
-
-  return this.chaining ? this : this.test;
+  return this.generateTestHelper('gte', '_testGreaterThanEqual', false)(expected, message);
 };
 
 /**
@@ -781,37 +629,7 @@ Assertions.prototype.gte = function (expected, message) {
  */
 
 Assertions.prototype.lt = function (expected, message) {
-  var gen = this._lastGeneratedShit;
-
-  this.test.actionPromiseQueue.push(function () {
-    var deferredAction = Q.defer();
-    deferredAction.resolve();
-    this.test.driver.events.on('driver:message', function () {
-      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'lt']) {
-          var testResult = this._testLowerThan(expected, this.test._lastGeneratedAction.data.value);
-
-          this.proceeded[this.test._lastGeneratedAction.hash + 'lt'] = true;
-
-          this.test.reporter.emit('report:assertion', {
-            success: testResult,
-            expected: expected,
-            value: this.test._lastGeneratedAction.data.value,
-            message: message,
-            type: this.test._lastGeneratedAction.type
-          });
-
-          this.test.incrementExpectations();
-          if (!testResult) {
-            this.test.incrementFailedAssertions();
-          }
-        }
-      }
-    }.bind(this));
-    return deferredAction.promise;
-  }.bind(this));
-
-  return this.chaining ? this : this.test;
+  return this.generateTestHelper('lt', '_testLowerThan', false)(expected, message);
 };
 
 /**
@@ -819,37 +637,7 @@ Assertions.prototype.lt = function (expected, message) {
  */
 
 Assertions.prototype.lte = function (expected, message) {
-  var gen = this._lastGeneratedShit;
-
-  this.test.actionPromiseQueue.push(function () {
-    var deferredAction = Q.defer();
-    deferredAction.resolve();
-    this.test.driver.events.on('driver:message', function () {
-      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'lte']) {
-          var testResult = this._testLowerThan(expected + 1, this.test._lastGeneratedAction.data.value);
-
-          this.proceeded[this.test._lastGeneratedAction.hash + 'lte'] = true;
-
-          this.test.reporter.emit('report:assertion', {
-            success: testResult,
-            expected: expected,
-            value: this.test._lastGeneratedAction.data.value,
-            message: message,
-            type: this.test._lastGeneratedAction.type
-          });
-
-          this.test.incrementExpectations();
-          if (!testResult) {
-            this.test.incrementFailedAssertions();
-          }
-        }
-      }
-    }.bind(this));
-    return deferredAction.promise;
-  }.bind(this));
-
-  return this.chaining ? this : this.test;
+  return this.generateTestHelper('lte', '_testLowerThanEqual', false)(expected, message);
 };
 
 // HELPER METHODS
@@ -902,6 +690,52 @@ Assertions.prototype._addToActionQueue = function (opts, driverMethod, cb) {
     return deferredAction.promise;
   }.bind(this));
   return this;
+};
+
+/**
+ *
+ */
+
+Assertions.prototype.generateTestHelper = function (name, assertionFn, negate) {
+  return function (expected, message) {
+    var gen = this._lastGeneratedShit;
+
+    this.test.actionPromiseQueue.push(function () {
+      var deferredAction = Q.defer();
+      deferredAction.resolve();
+      this.test.driver.events.on('driver:message', function () {
+
+        if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
+          if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + name]) {
+            var testResult = this[assertionFn](expected, this.test._lastGeneratedAction.data.value);
+
+            if (negate) {
+              testResult = !testResult;
+            }
+
+            this.proceeded[this.test._lastGeneratedAction.hash + name] = true;
+
+            this.test.reporter.emit('report:assertion', {
+              success: testResult,
+              expected: expected,
+              value: this.test._lastGeneratedAction.data.value,
+              message: message,
+              type: this.test._lastGeneratedAction.type
+            });
+
+            this.test.incrementExpectations();
+
+            if (!testResult) {
+              this.test.incrementFailedAssertions();
+            }
+          }
+        }
+      }.bind(this));
+      return deferredAction.promise;
+    }.bind(this));
+
+    return this.chaining ? this : this.test;
+  }.bind(this);
 };
 
 // ASSERT METHODS
@@ -968,6 +802,10 @@ Assertions.prototype._testGreaterThan = function (a, b) {
   return true;
 };
 
+Assertions.prototype._testGreaterThanEqual = function (a, b) {
+  return this._testGreaterThan(a - 1, b);
+};
+
 Assertions.prototype._testLowerThan = function (a, b) {
   try {
     chai.expect(b).to.be.below(a);
@@ -978,6 +816,9 @@ Assertions.prototype._testLowerThan = function (a, b) {
   return true;
 };
 
+Assertions.prototype._testLowerThanEqual = function (a, b) {
+  return this._testLowerThan(a + 1, b);
+};
 
 /**
  * Assert if a given value is boolean 'true'
