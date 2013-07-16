@@ -50,6 +50,7 @@ var Test = function (opts) {
 
   // prepare test specific data
   this.name = opts.name;
+  this.lastChain = [];
   this.uuids = {};
 };
 
@@ -110,7 +111,7 @@ Test.prototype = {
    */
 
   checkExpectations: function () {
-    return (this.expectation === null || (this.runnedExpactations === this.expectation));
+    return (this.expectation === null || !this.expectation || (this.runnedExpactations === this.expectation));
   },
 
   /**
@@ -232,7 +233,7 @@ Test.prototype = {
 
   _emitAssertionStatus: function () {
     this.reporter.emit('report:assertion:status', {
-      expected: this.expectation,
+      expected: (this.expectation ? this.expectation : this.runnedExpactations),
       run: this.runnedExpactations,
       status: this._testStatus()
     });
@@ -324,7 +325,7 @@ Test.prototype = {
    */
 
   _inheritAssertionHelpers: function (test) {
-    ['not'].forEach(function (method) {
+    ['not', 'between', 'gt', 'gte', 'lt', 'lte'].forEach(function (method) {
       test.is[method] = test.assert[method].bind(test.assert);
       test.assert.is[method] = test.assert[method].bind(test.assert);
     });
@@ -358,6 +359,9 @@ module.exports = function (opts) {
   var test = new Test(opts);
   test.assert = new (assertions())({test: test});
   test.assert.done = test.done.bind(this);
+  test.assert.query = test.query.bind(test.assert);
+  test.assert.$ = test.query.bind(test.assert);
+  test.end = test.assert.end.bind(test.assert);
 
   // copy assertions methods
   test = test._inheritAssertions(test);
