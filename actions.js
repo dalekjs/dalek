@@ -47,20 +47,15 @@ var Actions = function () {
  * Selector helper
  */
 
-Actions.prototype.$ = Actions.prototype.query = function () {
-  return this;
+Actions.prototype.query = function (selector) {
+  var that = !this.test ? this : this.test;
+  that.lastChain.push('querying');
+  that.selector = selector;
+  that.querying = true;
+  return this.test ? this : that;
 };
 
-/**
- * End of IFrame context
- */
-
-Actions.prototype.end = function () {
-  var hash = uuid.v4();
-  var cb = this._generateCallbackAssertion('endIFrameContext', 'endIFrameContext', hash);
-  this._addToActionQueue([hash], 'endIFrameContext', cb);
-  return this;
-};
+Actions.prototype.$ = Actions.prototype.query;
 
 /**
  * Triggers a mouse event on the first element found matching the provided selector.
@@ -71,6 +66,7 @@ Actions.prototype.end = function () {
  * @param {string} type
  * @param {string} selector
  * @return {Actions}
+ * @api
  */
 
 Actions.prototype.mouseEvent = function (type, selector) {
@@ -157,15 +153,26 @@ Actions.prototype.setHttpAuth = function (username, password) {
  * ```
  *
  * @api
- * @method toIFrame
- * @param {number} index
+ * @method toFrame
+ * @param {string} selector
  * @return {Actions}
  */
 
-Actions.prototype.toIframe = function (index) {
+Actions.prototype.toFrame = function (selector) {
   var hash = uuid.v4();
-  var cb = this._generateCallbackAssertion('toIframe', 'toIframe', index, hash);
-  this._addToActionQueue([index, hash], 'toIframe', cb);
+  var cb = this._generateCallbackAssertion('toFrame', 'toFrame', selector, hash);
+  this._addToActionQueue([selector, hash], 'toFrame', cb);
+  return this;
+};
+
+/**
+ * End of IFrame context
+ */
+
+Actions.prototype.toParent = function () {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('toFrame', 'toFrame', null, hash);
+  this._addToActionQueue([null, hash], 'toFrame', cb);
   return this;
 };
 
@@ -462,6 +469,14 @@ Actions.prototype.click = function (selector) {
   return this;
 };
 
+
+Actions.prototype.submit = function (selector) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('submit', 'submit', selector, hash);
+  this._addToActionQueue([selector, hash], 'submit', cb);
+  return this;
+};
+
 /**
  * Fills the fields of a form with given values.
  *
@@ -519,6 +534,28 @@ Actions.prototype.open = function (location, settings) {
 };
 
 /**
+ *
+ *
+ * @api
+ * @method type
+ * @param {string} keystrokes
+ * @return chainable
+ */
+
+Actions.prototype.type = function (selector, keystrokes) {
+  var hash = uuid.v4();
+
+  if (this.querying === true) {
+    keystrokes = selector;
+    selector = this.selector;
+  }
+
+  var cb = this._generateCallbackAssertion('type', 'type', selector, keystrokes, hash);
+  this._addToActionQueue([selector, keystrokes], 'type', cb);
+  return this;
+};
+
+/**
  * Waits until an element matching the provided
  * selector expression exists in remote DOM to process any next step.
  *
@@ -569,7 +606,6 @@ Actions.prototype._addToActionQueue = function (opts, driverMethod, cb) {
     var deferred = Q.defer();
     // add a generic identifier as the last argument to any action method call
     opts.push(uuid.v4());
-
     // check the method on the driver object && the callback function
     if (typeof(this.driver[driverMethod]) === 'function' && typeof(cb) === 'function') {
       // call the method on the driver object
