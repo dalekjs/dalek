@@ -281,7 +281,14 @@ Driver.prototype = {
 
   run: function (driverName, driverModule, browser, callback) {
     // load browser configuration
-    var browsers = this.config.get('browsers')[0];
+    var browsersRaw = this.config.get('browsers');
+    var browsers = [];
+
+    // Check if we have a valid browser conf, then get the data out
+    if (browsersRaw !== null) {
+      browsers = browsersRaw[0];
+    }
+
     var browserConfiguration = this.loadBrowserConfiguration(browser, browsers);
     var driverInstance = driverModule.create({events: this.driverEmitter, browser: browser, config: this.config, browserMo: browserConfiguration.module, browserConf: browserConfiguration.configuration});
 
