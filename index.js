@@ -61,6 +61,7 @@ Assertions = function (opts) {
  */
 
 Assertions.prototype.chain = function () {
+  this.test.lastChain.push('chaining');
   this.chaining = true;
   return this;
 };
@@ -73,7 +74,14 @@ Assertions.prototype.chain = function () {
  */
 
 Assertions.prototype.end = function () {
-  this.chaining = false;
+  var lastAction = this.test.lastChain.pop();
+  if (lastAction === 'chaining') {
+    this.chaining = false;
+  }
+
+  if (lastAction  === 'querying') {
+    this.test.querying = false;
+  }
   return this.test;
 };
 
@@ -179,6 +187,13 @@ Assertions.prototype.resourceExists = function (url, message) {
 
 Assertions.prototype.numberOfElements = function (selector, expected, message) {
   var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = expected;
+    expected = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('numberOfElements', 'numberOfElements', this._testShallowEquals, hash, {expected: expected, selector: selector, message: message}).bind(this.test);
   this._addToActionQueue([selector, expected, hash], 'getNumberOfElements', cb);
   return this.chaining ? this : this.test;
@@ -273,8 +288,15 @@ Assertions.prototype.numberOfElements = function (selector, expected, message) {
 
 Assertions.prototype.numberOfVisibleElements = function (selector, expected, message) {
   var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = expected;
+    expected = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('numberOfVisibleElements', 'numberOfVisibleElements', this._testShallowEquals, hash, {expected: expected, selector: selector, message: message}).bind(this.test);
-  this._addToActionQueue([selector, expected, hash], 'numberOfVisibleElements', cb);
+  this._addToActionQueue([selector, expected, hash], 'getNumberOfVisibleElements', cb);
   return this.chaining ? this : this.test;
 };
 
@@ -376,6 +398,12 @@ Assertions.prototype.httpStatus = function (status, message) {
 
 Assertions.prototype.exists = function (selector, message) {
   var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('exists', 'exists', this._testTruthy, hash, {selector: selector, message: message}).bind(this.test);
   this._addToActionQueue([selector, hash], 'exists', cb);
   return this.chaining ? this : this.test;
@@ -401,6 +429,12 @@ Assertions.prototype.exists = function (selector, message) {
 
 Assertions.prototype.doesntExist = function (selector, message) {
   var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('exists', '!exists', this._testFalsy, hash, {selector: selector, message: message}).bind(this.test);
   this._addToActionQueue([selector, hash], 'exists', cb);
   return this.chaining ? this : this.test;
@@ -412,6 +446,12 @@ Assertions.prototype.doesntExist = function (selector, message) {
 
 Assertions.prototype.notVisible = function (selector, message) {
   var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('visible', '!visible', this._testFalsy, hash, {selector: selector, message: message}).bind(this.test);
   this._addToActionQueue([selector, hash], 'visible', cb);
   return this.chaining ? this : this.test;
@@ -423,6 +463,12 @@ Assertions.prototype.notVisible = function (selector, message) {
 
 Assertions.prototype.visible = function (selector, message) {
   var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('visible', 'visible', this._testTruthy, hash, {selector: selector, message: message}).bind(this.test);
   this._addToActionQueue([selector, hash], 'visible', cb);
   return this.chaining ? this : this.test;
@@ -434,6 +480,12 @@ Assertions.prototype.visible = function (selector, message) {
 
 Assertions.prototype.doesntHaveText = function (selector, expected, message) {
   var hash = uuid.v4();
+  if (this.test.querying === true) {
+    message = expected;
+    expected = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('text', '!text', this._testShallowUnequals, hash, {selector: selector, expected: expected, message: message}).bind(this.test);
   this._addToActionQueue([selector, expected, hash], 'text', cb);
   return this.chaining ? this : this.test;
@@ -445,9 +497,15 @@ Assertions.prototype.doesntHaveText = function (selector, expected, message) {
 
 Assertions.prototype.text = function (selector, expected, message) {
   var hash = uuid.v4();
+  if (this.test.querying === true) {
+    message = expected;
+    expected = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('text', 'text', this._testShallowEquals, hash, {selector: selector, expected: expected, message: message}).bind(this.test);
   this._addToActionQueue([selector, expected, hash], 'text', cb);
-  return this.chaining ? this : this.test;
+  return (this.chaining || this.test.querying) ? this : this.test;
 };
 
 /**
@@ -466,6 +524,22 @@ Assertions.prototype.title = function (expected, message) {
 };
 
 /**
+ * Asserts that given title does not mathc the given expactions
+ *
+ * @param {String} expected
+ * @param {String} message
+ * @return {Object}
+ */
+
+Assertions.prototype.doesntHaveTitle = function (expected, message) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('title', '!title', this._testShallowUnequals, hash, {expected: expected, message: message}).bind(this.test);
+  this._addToActionQueue([expected, hash], 'title', cb);
+  return this.chaining ? this : this.test;
+};
+
+
+/**
  *
  */
 
@@ -480,8 +554,27 @@ Assertions.prototype.url = function (expected, message) {
  *
  */
 
+Assertions.prototype.doesntHaveUrl = function (expected, message) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('url', '!url', this._testShallowUnequals, hash, {expected: expected, message: message}).bind(this.test);
+  this._addToActionQueue([expected, hash], 'url', cb);
+  return this.chaining ? this : this.test;
+};
+
+/**
+ *
+ */
+
 Assertions.prototype.attr = function (selector, attribute, expected, message) {
   var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = expected;
+    expected = attribute;
+    attribute = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('attribute', 'attribute', this._testShallowEquals, hash, {expected: expected, message: message, selector: selector, attribute: attribute}).bind(this.test);
   this._addToActionQueue([selector, attribute, expected, hash], 'attribute', cb);
   return this.chaining ? this : this.test;
@@ -501,8 +594,9 @@ Assertions.prototype.is = function (expected, message) {
     var deferredAction = Q.defer();
     deferredAction.resolve();
     this.test.driver.events.on('driver:message', function () {
-      if (gen.opts && gen.opts[1] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[1] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'is']) {
+
+      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
+        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'is']) {
           var testResult = this._testShallowEquals(expected, this.test._lastGeneratedAction.data.value);
 
           this.proceeded[this.test._lastGeneratedAction.hash + 'is'] = true;
@@ -541,8 +635,8 @@ Assertions.prototype.not = function (expected, message) {
     var deferredAction = Q.defer();
     deferredAction.resolve();
     this.test.driver.events.on('driver:message', function () {
-      if (gen.opts && gen.opts[1] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
-        if (gen.opts[1] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'not']) {
+      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
+        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'not']) {
           var testResult = this._testShallowEquals(expected, this.test._lastGeneratedAction.data.value);
 
           this.proceeded[this.test._lastGeneratedAction.hash + 'not'] = true;
@@ -568,6 +662,196 @@ Assertions.prototype.not = function (expected, message) {
   return this.chaining ? this : this.test;
 };
 
+/**
+ *
+ */
+
+Assertions.prototype.between = function (expected, message) {
+  var gen = this._lastGeneratedShit;
+
+  this.test.actionPromiseQueue.push(function () {
+    var deferredAction = Q.defer();
+    deferredAction.resolve();
+    this.test.driver.events.on('driver:message', function () {
+      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
+        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'between']) {
+          var testResult = this._testBetween(expected, this.test._lastGeneratedAction.data.value);
+
+          this.proceeded[this.test._lastGeneratedAction.hash + 'between'] = true;
+
+          this.test.reporter.emit('report:assertion', {
+            success: testResult,
+            expected: expected,
+            value: this.test._lastGeneratedAction.data.value,
+            message: message,
+            type: this.test._lastGeneratedAction.type
+          });
+
+          this.test.incrementExpectations();
+          if (!testResult) {
+            this.test.incrementFailedAssertions();
+          }
+        }
+      }
+    }.bind(this));
+    return deferredAction.promise;
+  }.bind(this));
+
+  return this.chaining ? this : this.test;
+};
+
+/**
+ *
+ */
+
+Assertions.prototype.gt = function (expected, message) {
+  var gen = this._lastGeneratedShit;
+
+  this.test.actionPromiseQueue.push(function () {
+    var deferredAction = Q.defer();
+    deferredAction.resolve();
+    this.test.driver.events.on('driver:message', function () {
+      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
+        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'gt']) {
+          var testResult = this._testGreaterThan(expected, this.test._lastGeneratedAction.data.value);
+
+          this.proceeded[this.test._lastGeneratedAction.hash + 'gt'] = true;
+
+          this.test.reporter.emit('report:assertion', {
+            success: testResult,
+            expected: expected,
+            value: this.test._lastGeneratedAction.data.value,
+            message: message,
+            type: this.test._lastGeneratedAction.type
+          });
+
+          this.test.incrementExpectations();
+          if (!testResult) {
+            this.test.incrementFailedAssertions();
+          }
+        }
+      }
+    }.bind(this));
+    return deferredAction.promise;
+  }.bind(this));
+
+  return this.chaining ? this : this.test;
+};
+
+/**
+ *
+ */
+
+Assertions.prototype.gte = function (expected, message) {
+  var gen = this._lastGeneratedShit;
+
+  this.test.actionPromiseQueue.push(function () {
+    var deferredAction = Q.defer();
+    deferredAction.resolve();
+    this.test.driver.events.on('driver:message', function () {
+      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
+        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'gte']) {
+          var testResult = this._testGreaterThan(expected - 1, this.test._lastGeneratedAction.data.value);
+
+          this.proceeded[this.test._lastGeneratedAction.hash + 'gte'] = true;
+
+          this.test.reporter.emit('report:assertion', {
+            success: testResult,
+            expected: expected,
+            value: this.test._lastGeneratedAction.data.value,
+            message: message,
+            type: this.test._lastGeneratedAction.type
+          });
+
+          this.test.incrementExpectations();
+          if (!testResult) {
+            this.test.incrementFailedAssertions();
+          }
+        }
+      }
+    }.bind(this));
+    return deferredAction.promise;
+  }.bind(this));
+
+  return this.chaining ? this : this.test;
+};
+
+/**
+ *
+ */
+
+Assertions.prototype.lt = function (expected, message) {
+  var gen = this._lastGeneratedShit;
+
+  this.test.actionPromiseQueue.push(function () {
+    var deferredAction = Q.defer();
+    deferredAction.resolve();
+    this.test.driver.events.on('driver:message', function () {
+      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
+        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'lt']) {
+          var testResult = this._testLowerThan(expected, this.test._lastGeneratedAction.data.value);
+
+          this.proceeded[this.test._lastGeneratedAction.hash + 'lt'] = true;
+
+          this.test.reporter.emit('report:assertion', {
+            success: testResult,
+            expected: expected,
+            value: this.test._lastGeneratedAction.data.value,
+            message: message,
+            type: this.test._lastGeneratedAction.type
+          });
+
+          this.test.incrementExpectations();
+          if (!testResult) {
+            this.test.incrementFailedAssertions();
+          }
+        }
+      }
+    }.bind(this));
+    return deferredAction.promise;
+  }.bind(this));
+
+  return this.chaining ? this : this.test;
+};
+
+/**
+ *
+ */
+
+Assertions.prototype.lte = function (expected, message) {
+  var gen = this._lastGeneratedShit;
+
+  this.test.actionPromiseQueue.push(function () {
+    var deferredAction = Q.defer();
+    deferredAction.resolve();
+    this.test.driver.events.on('driver:message', function () {
+      if (gen.opts && gen.opts[(gen.opts.length - 1)] && this.test._lastGeneratedAction && this.test._lastGeneratedAction.hash) {
+        if (gen.opts[(gen.opts.length - 1)] === this.test._lastGeneratedAction.hash && !this.proceeded[this.test._lastGeneratedAction.hash + 'lte']) {
+          var testResult = this._testLowerThan(expected + 1, this.test._lastGeneratedAction.data.value);
+
+          this.proceeded[this.test._lastGeneratedAction.hash + 'lte'] = true;
+
+          this.test.reporter.emit('report:assertion', {
+            success: testResult,
+            expected: expected,
+            value: this.test._lastGeneratedAction.data.value,
+            message: message,
+            type: this.test._lastGeneratedAction.type
+          });
+
+          this.test.incrementExpectations();
+          if (!testResult) {
+            this.test.incrementFailedAssertions();
+          }
+        }
+      }
+    }.bind(this));
+    return deferredAction.promise;
+  }.bind(this));
+
+  return this.chaining ? this : this.test;
+};
+
 // HELPER METHODS
 // --------------
 
@@ -581,7 +865,7 @@ Assertions.prototype._generateCallbackAssertion = function (key, type, test, has
 
       this._lastGeneratedAction = {key: key, type: type, test: test, hash: hash, opts: opts, data: data};
 
-      if (!opts.expected && (key === 'title' || key === 'url')) {
+      if (!opts.expected && (key === 'title' || key === 'url' || key === 'text' || key === 'attribute' || key === 'numberOfElements' || key === 'numberOfVisibleElements')) {
         return false;
       }
 
@@ -662,6 +946,38 @@ Assertions.prototype._testShallowUnequals = function (a, b) {
 
   return true;
 };
+
+
+Assertions.prototype._testBetween = function (a, b) {
+  try {
+    chai.expect(b).to.be.within(a[0], a[1]);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+};
+
+Assertions.prototype._testGreaterThan = function (a, b) {
+  try {
+    chai.expect(b).to.be.above(a);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+};
+
+Assertions.prototype._testLowerThan = function (a, b) {
+  try {
+    chai.expect(b).to.be.below(a);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+};
+
 
 /**
  * Assert if a given value is boolean 'true'
