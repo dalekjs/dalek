@@ -589,7 +589,7 @@ Actions.prototype.resize = function (dimensions) {
 };
 
 /**
- * Resizes the browser window
+ * Sets a cookie
  */
 
 Actions.prototype.setCookie = function (name, contents) {
