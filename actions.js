@@ -65,7 +65,7 @@ Actions.prototype.$ = Actions.prototype.query;
  * @method mouseEvent
  * @param {string} type
  * @param {string} selector
- * @return {Actions}
+ * @chainable
  * @api
  */
 
@@ -173,6 +173,28 @@ Actions.prototype.toParent = function () {
   var hash = uuid.v4();
   var cb = this._generateCallbackAssertion('toFrame', 'toFrame', null, hash);
   this._addToActionQueue([null, hash], 'toFrame', cb);
+  return this;
+};
+
+/**
+ * Change scope to a specific window context
+ */
+
+Actions.prototype.toWindow = function (name) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('toWindow', 'toWindow', name, hash);
+  this._addToActionQueue([name, hash], 'toWindow', cb);
+  return this;
+};
+
+/**
+ * Go back to the parent window context
+ */
+
+Actions.prototype.toParentWindow = function () {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('toWindow', 'toWindow', null, hash);
+  this._addToActionQueue([null, hash], 'toWindow', cb);
   return this;
 };
 
@@ -492,21 +514,21 @@ Actions.prototype.submit = function (selector) {
  *
  * ```javascript
  * test.open('http://dalekjs.com')
- *     .val('#ijustwannahaveavalue', )
+ *     .setValue('#ijustwannahaveavalue', 'a value')
  *     .title().is('DalekJS - Frequently asked questions', 'What the F.A.Q.');
  * ```
  *
  * @api
- * @method val
+ * @method setValue
  * @param {string} selector
  * @param {string} value
  * @return {Actions}
  */
 
-Actions.prototype.val = function (selector, value) {
+Actions.prototype.setValue = function (selector, value) {
   var hash = uuid.v4();
-  var cb = this._generateCallbackAssertion('val', 'val', selector + ' : ' + value, hash);
-  this._addToActionQueue([selector, value, hash], 'val', cb);
+  var cb = this._generateCallbackAssertion('setValue', 'setValue', selector + ' : ' + value, hash);
+  this._addToActionQueue([selector, value, hash], 'setValue', cb);
   return this;
 };
 
@@ -552,6 +574,17 @@ Actions.prototype.type = function (selector, keystrokes) {
 
   var cb = this._generateCallbackAssertion('type', 'type', selector, keystrokes, hash);
   this._addToActionQueue([selector, keystrokes], 'type', cb);
+  return this;
+};
+
+/**
+ * Resizes the browser window
+ */
+
+Actions.prototype.resize = function (dimensions) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('resize', 'resize', dimensions, hash);
+  this._addToActionQueue([dimensions, hash], 'resize', cb);
   return this;
 };
 
