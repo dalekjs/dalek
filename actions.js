@@ -589,6 +589,17 @@ Actions.prototype.resize = function (dimensions) {
 };
 
 /**
+ * Resizes the browser window
+ */
+
+Actions.prototype.setCookie = function (name, contents) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('setCookie', 'setCookie', name, contents, hash);
+  this._addToActionQueue([name, contents, hash], 'setCookie', cb);
+  return this;
+};
+
+/**
  * Waits until an element matching the provided
  * selector expression exists in remote DOM to process any next step.
  *
