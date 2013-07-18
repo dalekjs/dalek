@@ -669,7 +669,6 @@ Assertions.prototype.doesntHaveTitle = function (expected, message) {
   return this.chaining ? this : this.test;
 };
 
-
 /**
  *
  */
@@ -784,7 +783,7 @@ Assertions.prototype._generateCallbackAssertion = function (key, type, test, has
 
       this._lastGeneratedAction = {key: key, type: type, test: test, hash: hash, opts: opts, data: data};
 
-      if (!opts.expected && (key === 'title' || key === 'url' || key === 'text' || key === 'attribute' || key === 'numberOfElements' || key === 'numberOfVisibleElements')) {
+      if (!opts.expected && (key === 'title' || key === 'width' || key === 'height' || key === 'url' || key === 'text' || key === 'attribute' || key === 'numberOfElements' || key === 'numberOfVisibleElements')) {
         return false;
       }
 
