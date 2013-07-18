@@ -369,7 +369,7 @@ Assertions.prototype.val = function (selector, expected, message) {
   }
 
   var cb = this._generateCallbackAssertion('val', 'val', this._testShallowEquals, hash, {expected: expected, selector: selector, message: message}).bind(this.test);
-  this._addToActionQueue([selector, expected, hash], 'getValue', cb);
+  this._addToActionQueue([selector, expected, hash], 'val', cb);
   return this.chaining ? this : this.test;
 };
 
