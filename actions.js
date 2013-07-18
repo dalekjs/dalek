@@ -578,6 +578,53 @@ Actions.prototype.type = function (selector, keystrokes) {
 };
 
 /**
+ *
+ *
+ * @api
+ * @method answer
+ * @param {string} keystrokes
+ * @return chainable
+ */
+
+Actions.prototype.answer = function (keystrokes) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('promptText', 'promptText', keystrokes, hash);
+  this._addToActionQueue([keystrokes, hash], 'promptText', cb);
+  return this;
+};
+
+/**
+ *
+ *
+ * @api
+ * @method acceptAlert
+ * @param {string} keystrokes
+ * @return chainable
+ */
+
+Actions.prototype.acceptAlert = function () {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('acceptAlert', 'acceptAlert', hash);
+  this._addToActionQueue([hash], 'acceptAlert', cb);
+  return this;
+};
+
+/**
+ *
+ *
+ * @api
+ * @method dismissAlert
+ * @return chainable
+ */
+
+Actions.prototype.dismissAlert = function () {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('dismissAlert', 'dismissAlert', hash);
+  this._addToActionQueue([hash], 'dismissAlert', cb);
+  return this;
+};
+
+/**
  * Resizes the browser window
  */
 
@@ -585,6 +632,17 @@ Actions.prototype.resize = function (dimensions) {
   var hash = uuid.v4();
   var cb = this._generateCallbackAssertion('resize', 'resize', dimensions, hash);
   this._addToActionQueue([dimensions, hash], 'resize', cb);
+  return this;
+};
+
+/**
+ * Maximizes the browser window
+ */
+
+Actions.prototype.maximize = function () {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('maximize', 'maximize', hash);
+  this._addToActionQueue([hash], 'maximize', cb);
   return this;
 };
 
