@@ -416,6 +416,19 @@ Assertions.prototype.height = function (selector, expected, message) {
   return this.chaining ? this : this.test;
 };
 
+Assertions.prototype.selected = function (selector, message) {
+  var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = selector;
+    selector = this.test.selector;
+  }
+
+  var cb = this._generateCallbackAssertion('selected', 'selected', this._testShallowEquals, hash, {expected: true, selector: selector, message: message}).bind(this.test);
+  this._addToActionQueue([selector, true, hash], 'selected', cb);
+  return this.chaining ? this : this.test;
+};
+
 /**
  * Asserts that current HTTP status code is the same as the one passed as argument.
  * TODO: Needs some work
