@@ -442,6 +442,32 @@ Assertions.prototype.notSelected = function (selector, message) {
   return this.chaining ? this : this.test;
 };
 
+Assertions.prototype.enabled = function (selector, message) {
+  var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = selector;
+    selector = this.test.selector;
+  }
+
+  var cb = this._generateCallbackAssertion('enabled', 'enabled', this._testShallowEquals, hash, {expected: true, selector: selector, message: message}).bind(this.test);
+  this._addToActionQueue([selector, true, hash], 'enabled', cb);
+  return this.chaining ? this : this.test;
+};
+
+Assertions.prototype.disabled = function (selector, message) {
+  var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = selector;
+    selector = this.test.selector;
+  }
+
+  var cb = this._generateCallbackAssertion('enabled', 'enabled', this._testShallowEquals, hash, {expected: false, selector: selector, message: message}).bind(this.test);
+  this._addToActionQueue([selector, false, hash], 'enabled', cb);
+  return this.chaining ? this : this.test;
+};
+
 /**
  * Asserts that current HTTP status code is the same as the one passed as argument.
  * TODO: Needs some work
