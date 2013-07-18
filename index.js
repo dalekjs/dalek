@@ -601,6 +601,17 @@ Assertions.prototype.doesntHaveText = function (selector, expected, message) {
 };
 
 /**
+ * Asserts that given text does not exist in the provided selector.
+ */
+
+Assertions.prototype.alertDoesntHaveText = function (expected, message) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('alertText', '!alertText', this._testShallowUnequals, hash, {expected: expected, message: message}).bind(this.test);
+  this._addToActionQueue([expected, hash], 'alertText', cb);
+  return this.chaining ? this : this.test;
+};
+
+/**
  * Asserts that given text does exist in the provided selector.
  */
 
