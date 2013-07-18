@@ -361,6 +361,13 @@ Assertions.prototype.numberOfVisibleElements = function (selector, expected, mes
 
 Assertions.prototype.val = function (selector, expected, message) {
   var hash = uuid.v4();
+
+  if (this.test.querying === true) {
+    message = expected;
+    expected = selector;
+    selector = this.test.selector;
+  }
+
   var cb = this._generateCallbackAssertion('val', 'val', this._testShallowEquals, hash, {expected: expected, selector: selector, message: message}).bind(this.test);
   this._addToActionQueue([selector, expected, hash], 'getValue', cb);
   return this.chaining ? this : this.test;
