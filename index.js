@@ -468,6 +468,13 @@ Assertions.prototype.disabled = function (selector, message) {
   return this.chaining ? this : this.test;
 };
 
+Assertions.prototype.cookie = function (name, expected, message) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('cookie', 'cookie', this._testShallowEquals, hash, {expected: expected, name: name, message: message}).bind(this.test);
+  this._addToActionQueue([name, expected, hash], 'cookie', cb);
+  return this.chaining ? this : this.test;
+};
+
 /**
  * Asserts that current HTTP status code is the same as the one passed as argument.
  * TODO: Needs some work
