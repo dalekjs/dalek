@@ -629,6 +629,17 @@ Assertions.prototype.text = function (selector, expected, message) {
 };
 
 /**
+ * Asserts that given alertText does exist in the provided alert/confirm or prompt dialog.
+ */
+
+Assertions.prototype.alertText = function (expected, message) {
+  var hash = uuid.v4();
+  var cb = this._generateCallbackAssertion('alertText', 'alertText', this._testShallowEquals, hash, {expected: expected, message: message}).bind(this.test);
+  this._addToActionQueue([expected, hash], 'alertText', cb);
+  return (this.chaining || this.test.querying) ? this : this.test;
+};
+
+/**
  * Asserts that given text does exist in the provided selector.
  *
  * @param {String} expected
