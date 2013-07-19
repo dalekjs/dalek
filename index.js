@@ -43,6 +43,7 @@ var defaults = {
   reporter: ['console'],
   driver: ['native'],
   browser: ['phantomjs'],
+  viewport: {width: 1280, height: 1024},
   logLevel: 3
 };
 
