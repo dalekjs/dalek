@@ -52,6 +52,8 @@ var Config = function (defaults, opts) {
  * @module DalekJS
  * @class Config
  * @namespace Dalek
+ * @part Config
+ * @api
  */
 
 Config.prototype = {
