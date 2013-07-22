@@ -30,6 +30,8 @@
  * @module DalekJS
  * @class Reporter
  * @namespace Dalek
+ * @part Reporter
+ * @api
  */
 
 var Reporter = {
