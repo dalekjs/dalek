@@ -42,6 +42,8 @@ var Timer = function () {
  * @module DalekJS
  * @class Timer
  * @namespace Dalek
+ * @part Timer
+ * @api
  */
 
 Timer.prototype = {
