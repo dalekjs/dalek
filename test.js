@@ -60,6 +60,8 @@ var Test = function (opts) {
  * @module DalekJS
  * @class Test
  * @namespace Dalek
+ * @part test
+ * @api
  */
 
 Test.prototype = {
