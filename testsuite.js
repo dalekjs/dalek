@@ -43,9 +43,13 @@ var Testsuite = function (options) {
 };
 
 /**
+ * Testsuite
+ *
  * @module DalekJS
  * @class Testsuite
  * @namespace Dalek
+ * @part Testsuite
+ * @api
  */
 
 Testsuite.prototype = {
