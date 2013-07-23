@@ -500,6 +500,12 @@ Actions.prototype.click = function (selector) {
   return this;
 };
 
+/**
+ * Submits a form
+ *
+ * @api
+ * @method submit
+ */
 
 Actions.prototype.submit = function (selector) {
   var hash = uuid.v4();
