@@ -45,6 +45,9 @@ var Actions = function () {
 
 /**
  * Selector helper
+ *
+ * @api
+ * @method query
  */
 
 Actions.prototype.query = function (selector) {
@@ -54,6 +57,13 @@ Actions.prototype.query = function (selector) {
   that.querying = true;
   return this.test ? this : that;
 };
+
+/**
+ * Selector helper
+ *
+ * @api
+ * @method $
+ */
 
 Actions.prototype.$ = Actions.prototype.query;
 
@@ -641,6 +651,9 @@ Actions.prototype.dismissAlert = function () {
 
 /**
  * Resizes the browser window
+ *
+ * @api
+ * @method resize
  */
 
 Actions.prototype.resize = function (dimensions) {
@@ -652,6 +665,9 @@ Actions.prototype.resize = function (dimensions) {
 
 /**
  * Maximizes the browser window
+ *
+ * @api
+ * @method maximize
  */
 
 Actions.prototype.maximize = function () {
@@ -663,6 +679,9 @@ Actions.prototype.maximize = function () {
 
 /**
  * Sets a cookie
+ *
+ * @api
+ * @method setCookie
  */
 
 Actions.prototype.setCookie = function (name, contents) {
