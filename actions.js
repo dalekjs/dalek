@@ -181,6 +181,9 @@ Actions.prototype.toParent = function () {
 
 /**
  * Change scope to a specific window context
+ *
+ * @api
+ * @method toWindow
  */
 
 Actions.prototype.toWindow = function (name) {
@@ -192,6 +195,9 @@ Actions.prototype.toWindow = function (name) {
 
 /**
  * Go back to the parent window context
+ *
+ * @api
+ * @method toParentWindow
  */
 
 Actions.prototype.toParentWindow = function () {
