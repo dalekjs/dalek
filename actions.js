@@ -167,6 +167,9 @@ Actions.prototype.toFrame = function (selector) {
 
 /**
  * End of IFrame context
+ *
+ * @api
+ * @method toParent
  */
 
 Actions.prototype.toParent = function () {
