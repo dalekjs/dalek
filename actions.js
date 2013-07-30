@@ -45,7 +45,34 @@ var Actions = function () {
 };
 
 /**
- * Selector helper
+ * It can be really cumbersome to repeat selectors all over when performing
+ * multiple actions or assertions on the same element(s).
+ * When you use the query method (or its alias $), you're able to specify a
+ * selector once instead of repeating it all over the place.
+ *
+ * So, instead of writing this:
+ *
+ * ```javascript
+ * test.open('http://doctorwhotv.co.uk/')
+ *     .assert.text('#nav').is('Navigation')
+ *     .assert.visible('#nav')
+ *     .assert.attr('#nav', 'data-nav', 'true')
+ *     .click('#nav')
+ *     .done();
+ * ```
+ *
+ * you can write this instead
+ *
+ * ```javascript
+ * test.open('http://doctorwhotv.co.uk/')
+ *     .query('#nav')
+ *       .assert.text().is('Navigation')
+ *       .assert.visible()
+ *       .assert.attr('data-nav', 'true')
+ *       .click()
+ *     .end()
+ *     .done();
+ * ```
  *
  * @api
  * @method query
