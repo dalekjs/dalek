@@ -962,7 +962,8 @@ Actions.prototype.waitForElement = function (selector, timeout) {
 
 /**
  * Generates a callback that will be fired when the action has been completed.
- * The callback itself will then validate the answer and will also emit an
+ * The callback itself will then validate the answer and will also emit an event
+ * that the action has been successfully executed.
  *
  * @method _generateCallbackAssertion
  * @param {string} key Unique key of the action
@@ -990,13 +991,12 @@ Actions.prototype._generateCallbackAssertion = function (key, type) {
 };
 
 /**
- * Generates a callback that will be fired when the action has been completed.
- * The callback itself will then validate the answer and will also emit an
  *
- * @method _generateCallbackAssertion
- * @param {string} key Unique key of the action
- * @param {string} type Type of the action (normalle the actions name)
- * @param {function} The generated callback function
+ *
+ * @method _addToActionQueue
+ * @param {object} opts Options of the action to invoke
+ * @param {string} driverMethod Name of the method to call on the driver
+ * @param {function} A callback function that will be executed when the action has been executed
  * @private
  * @chainable
  */
