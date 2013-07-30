@@ -991,7 +991,7 @@ Actions.prototype._generateCallbackAssertion = function (key, type) {
 };
 
 /**
- *
+ * Adds a method to the queue of actions/assertions to execute
  *
  * @method _addToActionQueue
  * @param {object} opts Options of the action to invoke
