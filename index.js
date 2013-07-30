@@ -33,7 +33,6 @@ var Assertions;
 
 /**
  * @module Assertions
- * @class Assertions
  * @namespace Dalek.Internal
  */
 
@@ -42,6 +41,13 @@ module.exports = function () {
 };
 
 /**
+ * Assertions check if the assumptions you made about a website are correct.
+ * Assetions might check if the title of a page is as expected,
+ * if an element has the expected text,
+ * if your mobile website version only displays a certian amount of elements
+ * and many more...
+ *
+ * @class Assertions
  * @constructor
  * @part Assertions
  * @api
@@ -56,8 +62,9 @@ Assertions = function (opts) {
 /**
  * Starts assertion chaining
  *
- * @method chain
  * @api
+ * @method chain
+ * @chainable
  */
 
 Assertions.prototype.chain = function () {
