@@ -1021,15 +1021,24 @@ Assertions.prototype.attr = function (selector, attribute, expected, message) {
 
 /**
  *
+ *
+ * @method is
+ * @param
+ * @param
+ * @chainable
  */
 
 Assertions.prototype.is = function (expected, message) {
   return this.generateTestHelper('is', '_testShallowEquals', false)(expected, message);
 };
 
-
 /**
  *
+ *
+ * @method not
+ * @param
+ * @param
+ * @chainable
  */
 
 Assertions.prototype.not = function (expected, message) {
@@ -1038,6 +1047,11 @@ Assertions.prototype.not = function (expected, message) {
 
 /**
  *
+ *
+ * @method between
+ * @param
+ * @param
+ * @chainable
  */
 
 Assertions.prototype.between = function (expected, message) {
@@ -1046,6 +1060,11 @@ Assertions.prototype.between = function (expected, message) {
 
 /**
  *
+ *
+ * @method gt
+ * @param
+ * @param
+ * @chainable
  */
 
 Assertions.prototype.gt = function (expected, message) {
@@ -1054,6 +1073,11 @@ Assertions.prototype.gt = function (expected, message) {
 
 /**
  *
+ *
+ * @method gte
+ * @param
+ * @param
+ * @chainable
  */
 
 Assertions.prototype.gte = function (expected, message) {
@@ -1062,6 +1086,11 @@ Assertions.prototype.gte = function (expected, message) {
 
 /**
  *
+ *
+ * @method lt
+ * @param
+ * @param
+ * @chainable
  */
 
 Assertions.prototype.lt = function (expected, message) {
@@ -1070,6 +1099,11 @@ Assertions.prototype.lt = function (expected, message) {
 
 /**
  *
+ *
+ * @method lte
+ * @param
+ * @param
+ * @chainable
  */
 
 Assertions.prototype.lte = function (expected, message) {
@@ -1081,6 +1115,13 @@ Assertions.prototype.lte = function (expected, message) {
 
 /**
  *
+ *
+ * @method _generateCallbackAssertion
+ * @param
+ * @param
+ * @param
+ * @return
+ * @private
  */
 
 Assertions.prototype._generateCallbackAssertion = function (key, type, test, hash, opts) {
@@ -1114,6 +1155,13 @@ Assertions.prototype._generateCallbackAssertion = function (key, type, test, has
 
 /**
  *
+ *
+ * @method _addToActionQueue
+ * @param
+ * @param
+ * @param
+ * @chainable
+ * @private
  */
 
 Assertions.prototype._addToActionQueue = function (opts, driverMethod, cb) {
@@ -1129,7 +1177,14 @@ Assertions.prototype._addToActionQueue = function (opts, driverMethod, cb) {
 };
 
 /**
+ * Generates a function that can be used
  *
+ * @method generateTestHelper
+ * @param
+ * @param
+ * @param
+ * @return
+ * @private
  */
 
 Assertions.prototype.generateTestHelper = function (name, assertionFn, negate) {
@@ -1217,6 +1272,15 @@ Assertions.prototype._testShallowUnequals = function (a, b) {
   return true;
 };
 
+/**
+ * Assert if a given value matches a range
+ *
+ * @method _testBetween
+ * @param {array} a Range to test
+ * @param {bool} b Value to compare
+ * @return {bool} testresult
+ * @private
+ */
 
 Assertions.prototype._testBetween = function (a, b) {
   try {
@@ -1228,6 +1292,16 @@ Assertions.prototype._testBetween = function (a, b) {
   return true;
 };
 
+/**
+ * Assert if a given value is greater than the value to compare
+ *
+ * @method _testGreaterThan
+ * @param {bool} a Value to test
+ * @param {bool} b Value to compare
+ * @return {bool} testresult
+ * @private
+ */
+
 Assertions.prototype._testGreaterThan = function (a, b) {
   try {
     chai.expect(b).to.be.above(a);
@@ -1238,9 +1312,29 @@ Assertions.prototype._testGreaterThan = function (a, b) {
   return true;
 };
 
+/**
+ * Assert if a given value is greater or equal than the value to compare
+ *
+ * @method _testGreaterThanEqual
+ * @param {bool} a Value to test
+ * @param {bool} b Value to compare
+ * @return {bool} testresult
+ * @private
+ */
+
 Assertions.prototype._testGreaterThanEqual = function (a, b) {
   return this._testGreaterThan(a - 1, b);
 };
+
+/**
+ * Assert if a given value is lower than the value to compare
+ *
+ * @method _testLowerThan
+ * @param {bool} a Value to test
+ * @param {bool} b Value to compare
+ * @return {bool} testresult
+ * @private
+ */
 
 Assertions.prototype._testLowerThan = function (a, b) {
   try {
@@ -1251,6 +1345,16 @@ Assertions.prototype._testLowerThan = function (a, b) {
 
   return true;
 };
+
+/**
+ * Assert if a given value is lower or equal than the value to compare
+ *
+ * @method _testLowerThanEqual
+ * @param {bool} a Value to test
+ * @param {bool} b Value to compare
+ * @return {bool} testresult
+ * @private
+ */
 
 Assertions.prototype._testLowerThanEqual = function (a, b) {
   return this._testLowerThan(a + 1, b);
