@@ -27,13 +27,14 @@
 var Q = require('q');
 var uuid = require('node-uuid');
 
-/**
- * @module
- */
-
+// int. global
 var reporter = null;
 
 /**
+ * Actions are a way to control your browsers, e.g. simulate user interactions
+ * like clicking elements, open urls, filling out input fields, etc.
+ *
+ * @class Actions
  * @constructor
  * @part Actions
  * @api
@@ -152,7 +153,7 @@ Actions.prototype.setHttpAuth = function (username, password) {
  * than switches to the iframe context, every action and assertion will be executed within the iFrame context.
  * Btw.: The domain of the IFrame can be whatever you want, this method has no same origin policy restrictions.
  *
- * If you wan't to get back to the parents context, you have to use the <a href="#meth-toParent">toParent</a> method.
+ * If you wan't to get back to the parents context, you have to use the [#meth-toParent"](toParent) method.
  *
  * ```html
  * <div>
@@ -227,7 +228,7 @@ Actions.prototype.toParent = function () {
  * than switches to the window context, every action and assertion will be executed within the chosen window context.
  * Btw.: The domain of the window can be whatever you want, this method has no same origin policy restrictions.
  *
- * If you want to get back to the parents context, you have to use the <a href="#meth-toParentWindow">toParentWindow</a> method.
+ * If you want to get back to the parents context, you have to use the [#meth-toParentWindow"](toParentWindow) method.
  *
  * ```html
  * <div>
@@ -790,16 +791,33 @@ Actions.prototype.dismiss = function () {
 };
 
 /**
- * Resizes the browser window.
+ * Resizes the browser window to a set of given dimensions (in px).
+ * The default configuration of dalek opening pages is a width of 1280px
+ * and a height of 1024px. You can specify your own default in the configuration.
  *
  * ```html
+ * <div>
+ *   <span id="magicspan">The span in the fireplace</span>
+ * </div>
  * ```
  *
  * ```css
+ * #magicspan {
+ *   display: inline;
+ * }
+ *
+ * @media all and (max-width: 500px) and (min-width: 300px) {
+ *   #magicspan {
+ *     display: none;
+ *   }
+ * }
  * ```
  *
  * ```javascript
  *  test.open('http://adomain.com')
+ *     .assert.visible('#magicspan', 'Big screen, visible span')
+ *     .resize({width: 400, height: 500})
+ *     .assert.notVisible('#magicspan', 'Small screen, no visible span magic!')
  *     .done();
  * ```
  *
@@ -817,16 +835,32 @@ Actions.prototype.resize = function (dimensions) {
 };
 
 /**
- * Maximizes the browser window
+ * Maximizes the browser window.
  *
  * ```html
+ * <div>
+ *   <span id="magicspan">The span in the fireplace</span>
+ * </div>
  * ```
  *
  * ```css
+ * #magicspan {
+ *   display: inline;
+ * }
+ *
+ * @media all and (max-width: 500px) and (min-width: 300px) {
+ *   #magicspan {
+ *     display: none;
+ *   }
+ * }
  * ```
  *
  * ```javascript
  *  test.open('http://adomain.com')
+ *     .resize({width: 400, height: 500})
+ *     .assert.notVisible('#magicspan', 'Small screen, no visible span magic!')
+ *     .maximize()
+ *     .assert.visible('#magicspan', 'Big screen, visible span')
  *     .done();
  * ```
  *
@@ -843,10 +877,20 @@ Actions.prototype.maximize = function () {
 };
 
 /**
- * Sets a cookie
+ * Sets a cookie.
+ * More configuration options will be implemented in the future,
+ * by now, you can only set a cookie with a specific name and contents.
+ * This will be a domain wide set cookie.
+ *
+ * ```javascript
+ *  test.open('http://adomain.com')
+ *      .setCookie('my_cookie_name', 'my=content')
+ *     .done();
+ * ```
  *
  * @api
  * @method setCookie
+ * @chainable
  */
 
 Actions.prototype.setCookie = function (name, contents) {
@@ -859,6 +903,21 @@ Actions.prototype.setCookie = function (name, contents) {
 /**
  * Waits until an element matching the provided
  * selector expression exists in remote DOM to process any next step.
+ *
+ * Lets assume we have a ticker that loads its contents via AJAX,
+ * and appends new elements, when the call has been successfully answered:
+ *
+ * ```javascript
+ * test.open('http://myticker.org')
+ *   .assert.text('.ticker-element:first-child', 'First!', 'First ticker element is visible')
+ *   // now we load the next ticker element, defsult timeout is 5 seconds
+ *   .waitForElement('.ticker-element:nth-child(2)')
+ *   .assert.text('.ticker-element:nth-child(2)', 'Me snd. one', 'Snd. ticker element is visible')
+ *   // Lets assume that this AJAX call can take longer, so we raise the default timeout to 10 seconds
+ *   .waitForElement('.ticker-element:last-child', 10000)
+ *   .assert.text('.ticker-element:last-child', 'Me, third one!', 'Third ticker element is visible')
+ *   .done();
+ * ```
  *
  * @api
  * @method waitForElement
@@ -875,7 +934,13 @@ Actions.prototype.waitForElement = function (selector, timeout) {
 };
 
 /**
+ * Generates a callback that will be fired when the action has been completed.
+ * The callback itself will then validate the answer and will also emit an
  *
+ * @method _generateCallbackAssertion
+ * @param {string} key Unique key of the action
+ * @param {string} type Type of the action (normalle the actions name)
+ * @return {function} The generated callback function
  * @private
  */
 
@@ -898,8 +963,15 @@ Actions.prototype._generateCallbackAssertion = function (key, type) {
 };
 
 /**
+ * Generates a callback that will be fired when the action has been completed.
+ * The callback itself will then validate the answer and will also emit an
  *
+ * @method _generateCallbackAssertion
+ * @param {string} key Unique key of the action
+ * @param {string} type Type of the action (normalle the actions name)
+ * @param {function} The generated callback function
  * @private
+ * @chainable
  */
 
 Actions.prototype._addToActionQueue = function (opts, driverMethod, cb) {
@@ -922,6 +994,10 @@ Actions.prototype._addToActionQueue = function (opts, driverMethod, cb) {
   }.bind(this));
   return this;
 };
+
+/**
+ * @module DalekJS
+ */
 
 module.exports = function (opts) {
   reporter = opts.reporter;
