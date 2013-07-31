@@ -245,7 +245,7 @@ Dalek.prototype = {
    */
 
   _addReporter: function (reporter) {
-    this.reporters.push(Reporter.loadReporter(reporter, {events: this.reporterEvents, logLevel: this.config.get('logLevel')}));
+    this.reporters.push(Reporter.loadReporter(reporter, {events: this.reporterEvents, config: this.config, logLevel: this.config.get('logLevel')}));
     return this;
   },
 
