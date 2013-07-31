@@ -408,15 +408,25 @@ Assertions.prototype.val = function (selector, expected, message) {
 };
 
 /**
- * Checks the computed style of the browser.
+ * Checks the computed style.
  *
  * ```html
+ * <div id="superColoredElement">Rose</div>
  * ```
  *
  * ```css
+ * #superColoredElement {
+ *   background-color: rgba(255, 0, 0, 1);
+ *   color: rgba(0, 128, 0, 1);
+ * }
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://unicorns.rainbows.io')
+ *    .assert.css('#superColoredElement', 'background-color', 'rgba(255, 0, 0, 1)')
+ *    .assert.css('#superColoredElement', 'color', 'rgba(0, 128, 0, 1)')
+ *    .done();
  * ```
  *
  * @api
@@ -444,12 +454,26 @@ Assertions.prototype.css = function (selector, property, expected, message) {
 };
 
 /**
- * Checks the width of an element.
+ * Checks the actual width of an element.
  *
  * ```html
+ *   <div id="fixed-dimensions" style="width: 100px"></div>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://localhost:5000/index.html')
+ *    // all true, all pixel
+ *    .assert.width('#fixed-dimensions', 100)
+ *    .assert.width('#fixed-dimensions').is(100)
+ *    .assert.width('#fixed-dimensions').is.not(100)
+ *    .assert.width('#fixed-dimensions').is.gt(90)
+ *    .assert.width('#fixed-dimensions').is.gte(97)
+ *    .assert.width('#fixed-dimensions').is.lt(120)
+ *    .assert.width('#fixed-dimensions').is.lte(110)
+ *    .assert.width('#fixed-dimensions').is.between([90, 110])
+ *    .done();
+ *
  * ```
  *
  * @api
@@ -475,12 +499,26 @@ Assertions.prototype.width = function (selector, expected, message) {
 };
 
 /**
- * Checks the height of an element.
+ * Checks the actual height of an element.
  *
  * ```html
+ *   <div id="fixed-dimensions" style="height: 100px"></div>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://localhost:5000/index.html')
+ *    // all true, all pixel
+ *    .assert.height('#fixed-dimensions', 100)
+ *    .assert.height('#fixed-dimensions').is(100)
+ *    .assert.height('#fixed-dimensions').is.not(100)
+ *    .assert.height('#fixed-dimensions').is.gt(90)
+ *    .assert.height('#fixed-dimensions').is.gte(97)
+ *    .assert.height('#fixed-dimensions').is.lt(120)
+ *    .assert.height('#fixed-dimensions').is.lte(110)
+ *    .assert.height('#fixed-dimensions').is.between([90, 110])
+ *    .done();
+ *
  * ```
  *
  * @api
@@ -506,12 +544,34 @@ Assertions.prototype.height = function (selector, expected, message) {
 };
 
 /**
- * Determine if an <option> element, or an <input> element of type checkbox or radiobutton is currently selected.
+ * Determine if an <option> element, or an <input> element of type checkbox or radio is currently selected.
  *
  * ```html
+ * <input type="checkbox" id="unchecked_checkbox" name="unchecked_checkbox"/>
+ * <input type="checkbox" id="checked_checkbox" name="checked_checkbox" checked="checked"/>
+ * <select id="select_elm" name="select_elm">
+ *   <option value="9">Eccleston</option>
+ *   <option selected value="10">Tennant</option>
+ *   <option value="11">Smith</option>
+ * </select>
  * ```
  *
+ * Checking radio and checkboxes:
+ *
  * ```javascript
+ *  test
+ *    .open('http://selectables.org')
+ *    .assert.selected('#checked_checkbox')
+ *    .done();
+ * ```
+ *
+ * Checking option elements:
+ *
+ * ```javascript
+ *  test
+ *    .open('http://selectables.org')
+ *    .assert.selected('#select_elm option:nth-child(2)')
+ *    .done();
  * ```
  *
  * @api
@@ -535,12 +595,34 @@ Assertions.prototype.selected = function (selector, message) {
 };
 
 /**
- * Determine if an <option> element, or an <input> element of type checkbox or radiobutton is currently not selected.
+ * Determine if an <option> element, or an <input> element of type checkbox or radio is currently not selected.
  *
  * ```html
+ * <input type="checkbox" id="unchecked_checkbox" name="unchecked_checkbox"/>
+ * <input type="checkbox" id="checked_checkbox" name="checked_checkbox" checked="checked"/>
+ * <select id="select_elm" name="select_elm">
+ *   <option value="9">Eccleston</option>
+ *   <option selected value="10">Tennant</option>
+ *   <option value="11">Smith</option>
+ * </select>
  * ```
  *
+ * Checking radio and checkboxes:
+ *
  * ```javascript
+ *  test
+ *    .open('http://selectables.org')
+ *    .assert.notSelected('#unchecked_checkbox')
+ *    .done();
+ * ```
+ *
+ * Checking option elements:
+ *
+ * ```javascript
+ *  test
+ *    .open('http://selectables.org')
+ *    .assert.notSelected('#select_elm option:last-child')
+ *    .done();
  * ```
  *
  * @api
@@ -567,9 +649,14 @@ Assertions.prototype.notSelected = function (selector, message) {
  * Determine if an element is currently enabled.
  *
  * ```html
+ * <input id="onmars" type="text" size="50" name="onmars" placeholder="State your name, rank and intention!"></input>
  * ```
  *
  * ```javascript
+ * test
+ *   .open('http://doctor.thedoctor.com/doctor')
+ *   .assert.enabled('#onmars', 'Is enabled!')
+ *   .done();
  * ```
  *
  * @api
@@ -596,9 +683,14 @@ Assertions.prototype.enabled = function (selector, message) {
  * Determine if an element is currently disabled.
  *
  * ```html
+ * <input disabled id="onearth" type="text" size="50" name="onearth" placeholder="State your name, rank and intention!"></input>
  * ```
  *
  * ```javascript
+ * test
+ *   .open('http://doctor.thedoctor.com/doctor')
+ *   .assert.disabled('#onearth', 'Is disabled!')
+ *   .done();
  * ```
  *
  * @api
@@ -625,6 +717,11 @@ Assertions.prototype.disabled = function (selector, message) {
  * Checks the contents of a cookie.
  *
  * ```javascript
+ *  test
+ *    .open('http://cookiejar.io/not_your_mothers_javascript.html')
+ *    .setCookie('atestcookie', 'foobar=baz')
+ *    .assert.cookie('atestcookie', 'foobar=baz')
+ *    .done();
  * ```
  *
  * @api
@@ -670,7 +767,9 @@ Assertions.prototype.httpStatus = function (status, message) {
  *
  * ```javascript
  * test
- *   .exists('#so-lonely', 'The loneliest element in the universe exists')
+ *   .open('http://doctor.thedoctor.com/doctor')
+ *   .assert.exists('#so-lonely', 'The loneliest element in the universe exists')
+ *   .done()
  * ```
  *
  * @api
@@ -704,7 +803,9 @@ Assertions.prototype.exists = function (selector, message) {
  *
  * ```javascript
  * test
+ *   .open('http://doctor.thedoctor.com/doctor')
  *   .doesntExist('#the-master', 'The master element has not been seen')
+ *   .done();
  * ```
  *
  * @api
@@ -731,9 +832,17 @@ Assertions.prototype.doesntExist = function (selector, message) {
  * Asserts that the element matching the provided selector expression is not visible.
  *
  * ```html
+ * <body>
+ *   <h1 style="display: none">Me? So hidden...</h1>
+ *   <h2>Me? So in viewport...</h2>
+ * </body>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://allyourviewportsbelongto.us')
+ *    .assert.notVisible('h1', 'Element is not visible')
+ *    .done();
  * ```
  *
  * @api
@@ -760,9 +869,16 @@ Assertions.prototype.notVisible = function (selector, message) {
  * Asserts that the element matching the provided selector expression is visible.
  *
  * ```html
+ * <body>
+ *   <h1>Me? So in viewport...</h1>
+ * </body>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://allyourviewportsbelongto.us')
+ *    .assert.visible('h1', 'Element is visible')
+ *    .done();
  * ```
  *
  * @api
