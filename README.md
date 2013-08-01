@@ -12,7 +12,7 @@ dalekjs
 [![unstable](https://rawgithub.com/hughsk/stability-badges/master/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
 
 [![NPM](https://nodei.co/npm/dalekjs.png)](https://nodei.co/npm/dalekjs/)
-
+[![NPM](https://nodei.co/npm-dl/dalekjs.png)](https://nodei.co/npm/dalekjs/)
 
 ## Ressources
 
@@ -24,6 +24,10 @@ dalekjs
 [User Docs](http://dalekjs.com/pages/getStarted.html) -
 [Homepage](http://dalekjs.com) -
 [Twitter](http://twitter.com/dalekjs)
+
+# Docs
+
+Daleks documentation can be found [here](http://dalekjs.com/pages/documentation.html)
 
 ## Help Is Just A Click Away
 
@@ -58,7 +62,7 @@ requests that implement the feature).
 other, better channels for seeking assistance, like StackOverflow and the
 Google Groups mailing list.
 
-![DalekJS](https://raw.github.com/dalekjs/dalekjs.com/master/img/logo.jpg)
+![DalekJS](https://raw.github.com/dalekjs/dalekjs.com/master/img/logo.png)
 
 ## Legal FooBar (MIT License)
 
