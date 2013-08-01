@@ -55,6 +55,8 @@ var Driver = function (options) {
  * @module DalekJS
  * @class Driver
  * @namespace Dalek
+ * @part Driver
+ * @api
  */
 
 Driver.prototype = {
