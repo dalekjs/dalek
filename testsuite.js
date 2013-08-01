@@ -110,6 +110,9 @@ Testsuite.prototype = {
       return this;
     }
 
+    // emit the suite started event
+    this.reporterEmitter.emit('report:testsuite:finished', this.name);
+
     // move on to the next suite
     callback();
     return this;
@@ -270,6 +273,9 @@ Testsuite.prototype = {
     this.testsToBeExecuted = this.numberOfTests = this.getNumberOfTests(tests);
     // kickstart the test execution
     this.executeNextTest(tests);
+
+    // emit the suite started event
+    this.reporterEmitter.emit('report:testsuite:started', this.name);
 
     // listen to the test:finished event & then start the next test
     // if there are no tests in this suite left,
