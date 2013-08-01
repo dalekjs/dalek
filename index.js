@@ -87,7 +87,7 @@ Assertions = function (opts) {
  *     .done();
  * ```
  *
- * to make it even more concise, you can combine this with the [actions.html#meth-query](query) method:
+ * to make it even more concise, you can combine this with the [query](actions.html#meth-query) method:
  *
  * ```javascript
  * test.open('http://doctorwhotv.co.uk/')
@@ -101,7 +101,7 @@ Assertions = function (opts) {
  *     .done();
  * ```
  *
- * Always make sure, you terminate it with the [#meth-end](end) method!
+ * Always make sure, you terminate it with the [end](#meth-end) method!
  *
  * @api
  * @method chain
@@ -223,7 +223,7 @@ Assertions.prototype.resourceExists = function (url, message) {
  *     .is.lte(5, 'Less than, or 5 blog teasers are present')
  * ```
  * And if you just wan't to know, if a certain amount of teasers isn't present,
- * you can still use the ':not(): assertion helper
+ * you can still use the not() assertion helper
  *
  * ```javascript
  * test.numberOfElements('#blog-overview .teaser')
@@ -905,9 +905,16 @@ Assertions.prototype.visible = function (selector, message) {
  * Asserts that given text does not exist in the provided selector.
  *
  * ```html
+ * <body>
+ *   <h1>This is a casperjs sandbox</h1>
+ * </body>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.doesntHaveText('h1', 'This page is a Dalek sandbox', 'It´s a sandbox!')
+ *    .done();
  * ```
  *
  * @api
@@ -935,9 +942,16 @@ Assertions.prototype.doesntHaveText = function (selector, expected, message) {
  * Asserts that given text does not exist in the current alert/prompt/confirm dialog.
  *
  * ```html
+ * <a href="#" id="alert_confirm" onclick="confirm('Confirm me!')">I make confirm</a>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://skaaro.com/index.html')
+ *    .click('#alert_confirm')
+ *    .assert.dialogDoesntHaveText('I am an alert')
+ *    .accept()
+ *    .done();
  * ```
  *
  * @api
@@ -958,9 +972,32 @@ Assertions.prototype.dialogDoesntHaveText = function (expected, message) {
  * Asserts that given text does exist in the provided selector.
  *
  * ```html
+ * <body>
+ *   <h1>This is a Dalek sandbox</h1>
+ * </body>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.text('h1', 'This page is a Dalek sandbox', 'Exterminate!')
+ *    .done();
+ * ```
+ *
+ * of course, text works also with the assertion helpers is() and not()
+ *
+ * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.text('h1').is('This page is a Dalek sandbox', 'Exterminate!')
+ *    .done();
+ * ```
+ *
+ * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.text('h1').is.not('This page is a CasperJS sandbox', 'Exterminate!')
+ *    .done();
  * ```
  *
  * @api
@@ -988,9 +1025,32 @@ Assertions.prototype.text = function (selector, expected, message) {
  * Asserts that given alertText does exist in the provided alert/confirm or prompt dialog.
  *
  * ```html
+ * <a href="#" id="alert" onclick="alert('I am an alert')">I make alerts!</a>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://skaaro.com/index.html')
+ *    .click('#alert_confirm')
+ *    .assert.dialogText('I am an alert')
+ *    .accept()
+ *    .done();
+ * ```
+ *
+ * of course, text works also with the assertion helpers is() and not()
+ *
+ * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.dialogText().is('I am an alert', 'Exterminate!')
+ *    .done();
+ * ```
+ *
+ * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.dialogText().is.not('I am an prompt', 'Exterminate!')
+ *    .done();
  * ```
  *
  * @api
@@ -1010,10 +1070,26 @@ Assertions.prototype.dialogText = function (expected, message) {
 /**
  * Asserts that the page title is as expected.
  *
- * ```html
+ * ```javascript
+ *   test.open('http://doctorwhotv.co.uk/')
+ *     .title('Doctor Who TV', 'Not your daleks tv')
+ *     .done();
  * ```
  *
+ * Yep, using assertion helpers is also possible:
+ *
  * ```javascript
+ *   test.open('http://doctorwhotv.co.uk/')
+ *     .title().is('Doctor Who TV', 'Not your daleks tv')
+ *     .done();
+ * ```
+ *
+ * and the not() helper is available too:
+ *
+ * ```javascript
+ *   test.open('http://doctorwhotv.co.uk/')
+ *     .title().is.not('Dalek Emperor TV', 'Not your daleks tv')
+ *     .done();
  * ```
  *
  * @api
@@ -1033,10 +1109,10 @@ Assertions.prototype.title = function (expected, message) {
 /**
  * Asserts that given title does not match the given expactions
  *
- * ```html
- * ```
- *
  * ```javascript
+ *   test.open('http://doctorwhotv.co.uk/')
+ *     .doesntHaveTitle('Dalek Emperor TV', 'Not your daleks tv')
+ *     .done();
  * ```
  *
  * @api
@@ -1056,10 +1132,35 @@ Assertions.prototype.doesntHaveTitle = function (expected, message) {
 /**
  * Asserts that the pages url is as expected.
  *
- * ```html
+ * ```javascript
+ *   test.open('http://doctorwhotv.co.uk/')
+ *     .url('http://doctorwhotv.co.uk/', 'Url is as expected')
+ *     .done();
  * ```
  *
+ * You can also check if the protocol changend,
+ * nice to see when you open github with http instead of https
+ *
  * ```javascript
+ *   test.open('http://github.com')
+ *     .url('https://github.com/', 'Changed prototcols')
+ *     .done();
+ * ```
+ *
+ * Yep, using assertion helpersx is also possible:
+ *
+ * ```javascript
+ *   test.open('http://github.com')
+ *     .url().is('http://doctorwhotv.co.uk/', 'Url is as expected')
+ *     .done();
+ * ```
+ *
+ * and the not() helper is available too:
+ *
+ * ```javascript
+ *   test.open('http://doctorwhotv.co.uk/')
+ *     .url().is.not('http://doctorwhotv.co.uk/', 'Url is as expected')
+ *     .done();
  * ```
  *
  * @api
@@ -1079,10 +1180,10 @@ Assertions.prototype.url = function (expected, message) {
 /**
  * Asserts that the pages url does not match the expectation.
  *
- * ```html
- * ```
- *
  * ```javascript
+ *   test.open('http://doctorwhotv.co.uk/')
+ *     .url('http://doctorwhotv.co.uk/', 'Url is as expected')
+ *     .done();
  * ```
  *
  * @api
@@ -1103,9 +1204,34 @@ Assertions.prototype.doesntHaveUrl = function (expected, message) {
  * Asserts that an elements attribute is as expected.
  *
  * ```html
+ * <form>
+ *   <button class="jumpButton" type="submit">Fire</button>
+ * </form>
  * ```
  *
  * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.attr('.jumpButton', 'type', 'submit')
+ *    .done();
+ * ```
+ *
+ * ```html
+ * <div id="dataDiv" data-spot="cat"></div>
+ * ```
+ *
+ * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.attr('#dataDiv').is('data-spot', 'cat', 'We found Datas cat!')
+ *    .done();
+ * ```
+ *
+ * ```javascript
+ *  test
+ *    .open('http://dalekjs.com/guineapig/')
+ *    .assert.attr('#dataDiv').is.not('data-spot', 'doc', 'Spot is not a dog!')
+ *    .done();
  * ```
  *
  * @api
@@ -1136,11 +1262,11 @@ Assertions.prototype.attr = function (selector, attribute, expected, message) {
 // -----------
 
 /**
- *
+ * Is helper
  *
  * @method is
- * @param
- * @param
+ * @param {mixed} expected Value to check
+ * @param {string} message Test message
  * @chainable
  */
 
@@ -1149,11 +1275,11 @@ Assertions.prototype.is = function (expected, message) {
 };
 
 /**
- *
+ * Not helper
  *
  * @method not
- * @param
- * @param
+ * @param {mixed} expected Value to check
+ * @param {string} message Test message
  * @chainable
  */
 
@@ -1162,11 +1288,11 @@ Assertions.prototype.not = function (expected, message) {
 };
 
 /**
- *
+ * Between helper
  *
  * @method between
- * @param
- * @param
+ * @param {mixed} expected Value to check
+ * @param {string} message Test message
  * @chainable
  */
 
@@ -1175,11 +1301,11 @@ Assertions.prototype.between = function (expected, message) {
 };
 
 /**
- *
+ * Gt helper
  *
  * @method gt
- * @param
- * @param
+ * @param {mixed} expected Value to check
+ * @param {string} message Test message
  * @chainable
  */
 
@@ -1188,11 +1314,11 @@ Assertions.prototype.gt = function (expected, message) {
 };
 
 /**
- *
+ * Gte helper
  *
  * @method gte
- * @param
- * @param
+ * @param {mixed} expected Value to check
+ * @param {string} message Test message
  * @chainable
  */
 
@@ -1201,11 +1327,11 @@ Assertions.prototype.gte = function (expected, message) {
 };
 
 /**
- *
+ * Lt helper
  *
  * @method lt
- * @param
- * @param
+ * @param {mixed} expected Value to check
+ * @param {string} message Test message
  * @chainable
  */
 
@@ -1214,11 +1340,11 @@ Assertions.prototype.lt = function (expected, message) {
 };
 
 /**
- *
+ * Lte helper
  *
  * @method lte
- * @param
- * @param
+ * @param {mixed} expected Value to check
+ * @param {string} message Test message
  * @chainable
  */
 
@@ -1230,13 +1356,14 @@ Assertions.prototype.lte = function (expected, message) {
 // --------------
 
 /**
- *
+ * Generates a callback that will be fired when the action has been completed.
+ * The callback itself will then validate the answer and will also emit an event
+ * that the action has been successfully executed.
  *
  * @method _generateCallbackAssertion
- * @param
- * @param
- * @param
- * @return
+ * @param {string} key Unique key of the action
+ * @param {string} type Type of the action (normalle the actions name)
+ * @return {function} The generated callback function
  * @private
  */
 
@@ -1270,14 +1397,14 @@ Assertions.prototype._generateCallbackAssertion = function (key, type, test, has
 };
 
 /**
- *
+ * Adds a method to the queue of actions/assertions to execute
  *
  * @method _addToActionQueue
- * @param
- * @param
- * @param
- * @chainable
+ * @param {object} opts Options of the action to invoke
+ * @param {string} driverMethod Name of the method to call on the driver
+ * @param {function} A callback function that will be executed when the action has been executed
  * @private
+ * @chainable
  */
 
 Assertions.prototype._addToActionQueue = function (opts, driverMethod, cb) {
