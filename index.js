@@ -1116,7 +1116,7 @@ Assertions.prototype.title = function (expected, message) {
  * ```
  *
  * @api
- * @method title
+ * @method doesntHaveTitle
  * @param {string} expected Expected testresult
  * @param {string} message Message for the test reporter
  * @chainable
