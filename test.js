@@ -331,6 +331,13 @@ Test.prototype = {
       test.is[method] = test.assert[method].bind(test.assert);
       test.assert.is[method] = test.assert[method].bind(test.assert);
     });
+    ['contain'].forEach(function (method) {
+      test.to = {};
+      test.assert.to = {};
+
+      test.to[method] = test.assert[method].bind(test.assert);
+      test.assert.to[method] = test.assert[method].bind(test.assert);
+    });
     return test;
   },
 
