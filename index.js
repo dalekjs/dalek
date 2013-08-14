@@ -1116,7 +1116,7 @@ Assertions.prototype.title = function (expected, message) {
  * ```
  *
  * @api
- * @method doesntHaveTitle
+ * @method title
  * @param {string} expected Expected testresult
  * @param {string} message Message for the test reporter
  * @chainable
@@ -1352,6 +1352,19 @@ Assertions.prototype.lte = function (expected, message) {
   return this.generateTestHelper('lte', '_testLowerThanEqual', false)(expected, message);
 };
 
+/**
+ * Contain helper
+ *
+ * @method contain
+ * @param {mixed} expected Value to check
+ * @param {string} message Test message
+ * @chainable
+ */
+
+Assertions.prototype.contain = function (expected, message) {
+  return this.generateTestHelper('contain', '_contain', false)(expected, message);
+};
+
 // HELPER METHODS
 // --------------
 
@@ -1423,9 +1436,9 @@ Assertions.prototype._addToActionQueue = function (opts, driverMethod, cb) {
  * Generates a function that can be used
  *
  * @method generateTestHelper
- * @param
- * @param
- * @param
+ * @param name
+ * @param assertionFn
+ * @param negate
  * @return
  * @private
  */
@@ -1582,6 +1595,26 @@ Assertions.prototype._testGreaterThanEqual = function (a, b) {
 Assertions.prototype._testLowerThan = function (a, b) {
   try {
     chai.expect(b).to.be.below(a);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+};
+
+/**
+ * Assert if a given value contain another value
+ *
+ * @method _contain
+ * @param {bool} a Value to test
+ * @param {bool} b Value to compare
+ * @return {bool} testresult
+ * @private
+ */
+
+Assertions.prototype._contain = function (a, b) {
+  try {
+    chai.expect(b).to.include(a);
   } catch (e) {
     return false;
   }
