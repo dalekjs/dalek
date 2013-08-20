@@ -28,6 +28,7 @@
     "grunt-complexity": "~0.1.3",
     "grunt-plato": "~0.2.1",
     "grunt-include-replace": "~1.1.0",
+    "grunt-bump": "~0.0.11",
     "blanket": "~1.1.5",
     "chai": "~1.7.2"
   },
