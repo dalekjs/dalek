@@ -328,7 +328,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bump');
 
   // define runner tasks
-  grunt.registerTask('pre-commit', 'contributors')
   grunt.registerTask('lint', 'jshint');
   grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'lint', 'mochaTest', 'generateCoverageBadge', 'complexity']);
   grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'plato', 'yuidoc', 'compress']);
