@@ -28,7 +28,7 @@
 var async = require('async');
 
 // int. libs
-var Testsuite = require('dalek-internal-testsuite');
+var Testsuite = require('dalek-internal-testsuite-canary');
 
 /**
  * Configures the driver instance
@@ -169,7 +169,11 @@ Driver.prototype = {
 
   getDefaultBrowserConfiguration: function (browser, browsers) {
     var browserConfiguration = {configuration: null, module: null};
-    browserConfiguration.module = require('dalek-browser-' + browser);
+    try {
+      browserConfiguration.module = require('dalek-browser-' + browser);
+    } catch (e) {
+      browserConfiguration.module = require('dalek-browser-' + browser + '-canary');
+    }
     if (browsers[browser]) {
       browserConfiguration.configuration = browsers[browser];
     }
