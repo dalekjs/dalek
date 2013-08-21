@@ -1,6 +1,6 @@
 {
-  "name": "dalekjs-canary-canary-canary-canary",
-  "version": "0.0.1-2013-08-21-15-44-56-2013-08-21-15-46-00-2013-08-21-15-46-47-2013-08-21-15-47-42",
+  "name": "dalekjs",
+  "version": "0.0.1",
   "description": "A node based cross browser testing tool",
   "main": "./index.js",
   "directories": {
