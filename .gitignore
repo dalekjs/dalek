@@ -11,6 +11,8 @@ pids
 logs
 results
 
+package-canary.json
+index-canary.js
 npm-debug.log
 report.zip
 

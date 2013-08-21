@@ -1,6 +1,6 @@
 {
-  "name": "dalekjs",
-  "version": "0.0.1",
+  "name": "dalekjs-canary-canary-canary-canary",
+  "version": "0.0.1-2013-08-21-15-44-56-2013-08-21-15-46-00-2013-08-21-15-46-47-2013-08-21-15-47-42",
   "description": "A node based cross browser testing tool",
   "main": "./index.js",
   "directories": {
@@ -30,19 +30,22 @@
     "grunt-include-replace": "~1.1.0",
     "grunt-bump": "~0.0.11",
     "blanket": "~1.1.5",
-    "chai": "~1.7.2"
+    "chai": "~1.7.2",
+    "grunt-git-contributors": "~0.1.4"
   },
   "scripts": {
     "test": "grunt test"
   },
   "repository": {
-      "type": "git",
-      "url": "http://github.com/dalekjs/dalek.git"
+    "type": "git",
+    "url": "http://github.com/dalekjs/dalek.git"
   },
   "bugs": {
     "url": "https://github.com/dalekjs/dalek/issues"
   },
-  "keywords": ["dalekjs"],
+  "keywords": [
+    "dalekjs"
+  ],
   "author": {
     "name": "Sebastian Golasch",
     "email": "public@asciidisco.com",

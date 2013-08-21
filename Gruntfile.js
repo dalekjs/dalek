@@ -107,6 +107,14 @@ module.exports = function(grunt) {
       }
     },
 
+    // generate contributors file
+    contributors: {
+      master: {
+        path: 'CONTRIBUTORS.md',
+        branch: 'master'
+      }
+    },
+
     // compress artifacts
     compress: {
       main: {
@@ -236,17 +244,28 @@ module.exports = function(grunt) {
 
     grunt.file.write('package.json', JSON.stringify(canaryPkg, true, 2));
 
+    // replace default includes with canary ones
+    var indexContents = grunt.file.read('index.js');
+    var oldContents = grunt.file.read('index.js');
+    indexContents = indexContents.replace('dalek-internal-driver', 'dalek-internal-driver-canary');
+    indexContents = indexContents.replace('dalek-internal-reporter', 'dalek-internal-reporter-canary');
+    indexContents = indexContents.replace('dalek-internal-timer', 'dalek-internal-timer-canary');
+    indexContents = indexContents.replace('dalek-internal-config', 'dalek-internal-config-canary');
+    grunt.file.write('index.js', indexContents);
+
     var npm = require('npm');
     npm.load({}, function() {
       npm.registry.adduser(process.env.npmuser, process.env.npmpass, process.env.npmmail, function(err) {
         if (err) {
           grunt.log.error(err);
           grunt.file.write('package.json', JSON.stringify(pkg, true, 2));
+          grunt.file.write('index.js', oldContents);
           done(false);
         } else {
           npm.config.set('email', process.env.npmmail, 'user');
           npm.commands.publish([], function(err) {
             grunt.file.write('package.json', JSON.stringify(pkg, true, 2));
+            grunt.file.write('index.js', oldContents);
             grunt.log.ok('Published canary build to registry');
             done(!err);
           });
@@ -302,12 +321,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
   grunt.loadNpmTasks('grunt-contrib-compress');
+  grunt.loadNpmTasks('grunt-git-contributors');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-complexity');
   grunt.loadNpmTasks('grunt-plato');
   grunt.loadNpmTasks('grunt-bump');
 
   // define runner tasks
+  grunt.registerTask('pre-commit', 'contributors')
   grunt.registerTask('lint', 'jshint');
   grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'lint', 'mochaTest', 'generateCoverageBadge', 'complexity']);
   grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'plato', 'yuidoc', 'compress']);
