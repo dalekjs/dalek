@@ -48,7 +48,18 @@ var Reporter = {
     try {
       require.resolve('dalek-reporter-' + reporter);
     } catch (e) {
-      return false;
+      try {
+        require.resolve('dalek-reporter-' + reporter + '-canary');
+      } catch (e) {
+        return false;
+      }
+
+      if (!this.isCanary) {
+        this.isCanary = {};
+      }
+
+      this.isCanary[reporter] = true;
+      return true;
     }
     return true;
   },
@@ -63,7 +74,7 @@ var Reporter = {
    */
 
   loadReporter: function (reporter, options) {
-    return require('dalek-reporter-' + reporter)(options);
+    return require('dalek-reporter-' + reporter + (this.isCanary[reporter] ? '-canary' : ''))(options);
   }
 };
 
