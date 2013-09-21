@@ -52,6 +52,14 @@ var Test = function (opts) {
   this.name = opts.name;
   this.lastChain = [];
   this.uuids = {};
+  this.contextVars = {};
+
+  if (this.name) {
+    this.timeoutForDone = setTimeout(function () {
+      this.done();
+      this.reporter.emit('warning', 'done not called!');
+    }.bind(this), 2000);
+  }
 };
 
 /**
@@ -78,6 +86,15 @@ Test.prototype = {
   expect: function (expectation) {
     this.expectation = parseInt(expectation, 10);
     return this;
+  },
+
+  data: function (key, value) {
+    if (value) {
+      this.contextVars[key] = value;
+      return this;
+    }
+
+    return function () { return this.contextVars[key] || null; }.bind(this);
   },
 
   /**
@@ -130,13 +147,15 @@ Test.prototype = {
   /**
    * Sets up all the bindings needed for a test to run
    *
-   * @method _testFin
+   * @method done
    * @return {object} result A promise
    * @private
    */
 
   done: function () {
     var result = Q.resolve();
+    // clear the done error timeout
+    clearTimeout(this.timeoutForDone);
     // remove all previously attached event listeners to clear the message queue
     this.driver.events.removeAllListeners('driver:message');
     // resolve the deferred when the test is finished
