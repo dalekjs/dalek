@@ -97,7 +97,7 @@ Driver.prototype = {
    */
 
   loadDriver: function (driver) {
-    this.reporterEvents.emit('report:log:system', 'Loading driver: "' + driver + '"');
+    this.reporterEvents.emit('report:log:system', 'dalek-internal-driver: Loading driver: "' + driver + '"');
     return require('dalek-driver-' + driver + (this.driverIsCanary ? '-canary' : ''));
   },
 
@@ -169,6 +169,7 @@ Driver.prototype = {
 
   getDefaultBrowserConfiguration: function (browser, browsers) {
     var browserConfiguration = {configuration: null, module: null};
+
     try {
       browserConfiguration.module = require('dalek-browser-' + browser);
     } catch (e) {
@@ -192,9 +193,25 @@ Driver.prototype = {
 
   getUserBrowserConfiguration: function (browser, browsers) {
     var browserConfiguration = {configuration: null, module: null};
-    if (browsers[browser] && browsers[browser].actAs) {
+
+    if (browsers && browsers[browser] && browsers[browser].actAs) {
       browserConfiguration.module = require('dalek-browser-' + browsers[browser].actAs);
       browserConfiguration.configuration = browsers[browser];
+    }
+
+    if (!browserConfiguration.module && browser.search(':') !== -1) {
+      var args = browser.split(':');
+      var extractedBrowser = args[0].trim();
+      var browserType = args[1].trim().toLowerCase();
+      browserConfiguration.module = require('dalek-browser-' + extractedBrowser);
+
+      if (browserConfiguration.module && browserConfiguration.module.browserTypes && browserConfiguration.module.browserTypes[browserType]) {
+        var binary = (process.platform === 'win32' ? browserConfiguration.module.browserTypes[browserType].win32 : browserConfiguration.module.browserTypes[browserType].darwin);
+        browserConfiguration.configuration = {
+          binary: binary,
+          type: browserType
+        };
+      }
     }
 
     return browserConfiguration;
@@ -237,7 +254,7 @@ Driver.prototype = {
    */
 
   createTestsuiteInstance: function (driverInstance, file) {
-    var suite = new Testsuite({file: file, driver: driverInstance, driverEmitter: this.driverEmitter, reporterEmitter: this.reporterEvents});
+    var suite = new Testsuite({numberOfSuites: this.files.length, file: file, driver: driverInstance, driverEmitter: this.driverEmitter, reporterEmitter: this.reporterEvents});
     return suite.run.bind(suite);
   },
 
@@ -258,7 +275,7 @@ Driver.prototype = {
   _onDriverReady: function (browser, driverName, callback, driverInstance) {
     // generate testsuite instance from test files
     var testsuites = this.getTestsuiteInstances(driverInstance);
-    this.reporterEvents.emit('report:run:browser', browser.charAt(0).toUpperCase() + browser.slice(1));
+    this.reporterEvents.emit('report:run:browser', driverInstance.webdriverClient.opts.longName);
     async.series(testsuites, this._onTestsuiteComplete.bind(this, callback, driverName, browser));
     return this;
   },
@@ -305,10 +322,21 @@ Driver.prototype = {
     }
 
     var browserConfiguration = this.loadBrowserConfiguration(browser, browsers);
-    var driverInstance = driverModule.create({events: this.driverEmitter, browser: browser, config: this.config, browserMo: browserConfiguration.module, browserConf: browserConfiguration.configuration});
+    var driverInstance = driverModule.create({events: this.driverEmitter, reporter: this.reporterEvents, browser: browser, config: this.config, browserMo: browserConfiguration.module, browserConf: browserConfiguration.configuration});
 
     // couple driver & session status events for the reporter
     this.coupleReporterEvents(driverName, browser);
+
+    // register shutdown handler
+    if (driverInstance.webdriverClient.opts.kill) {
+      this.driverEmitter.on('killAll', driverInstance.webdriverClient.opts.kill.bind(driverInstance.webdriverClient.opts));
+    }
+
+    // dispatch some (web)driver events to the reporter
+    this.driverEmitter.on('driver:webdriver:response', function (res) {
+      this.reporterEvents.emit('report:log:system:webdriver', 'webdriver: ' + res.statusCode + ' ' + res.method + ' ' + res.path);
+      this.reporterEvents.emit('report:log:system:webdriver', 'webdriver: ' + res.data);
+    }.bind(this));
 
     // run the tests in the browser, when the driver is ready
     // emit the tests:complete event, when all tests have been run
