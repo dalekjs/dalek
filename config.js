@@ -40,9 +40,11 @@ require('coffee-script');
  * @constructor
  */
 
-var Config = function (defaults, opts) {
+var Config = function (defaults, opts, advOpts) {
+  this.customFilename = null;
   this.defaultFilename = 'Dalekfile';
   this.supportedExtensions = ['yml', 'json5', 'json', 'js', 'coffee'];
+  this.advancedOptions = advOpts;
   this.config = this.load(defaults, opts.config, opts);
 };
 
@@ -87,13 +89,24 @@ Config.prototype = {
    * @private
    */
 
-  _checkFile: function (previousValue, ext) {
-    var fileToCheck = this.defaultFilename + '.' + ext;
+  _checkFile: function (previousValue, ext, idx, data) {
+    if (previousValue.length > 6) {
+      return previousValue;
+    }
+
+    var fileToCheck = this.defaultFilename + '.' + previousValue;
     if (fs.existsSync(fileToCheck)) {
       return fs.realpathSync(fileToCheck);
     }
 
-    return previousValue;
+    if (ext === data[data.length - 1]) {
+      fileToCheck = this.defaultFilename + '.' + ext;
+      if (fs.existsSync(fileToCheck)) {
+        return fs.realpathSync(fileToCheck);
+      }
+    }
+
+    return ext;
   },
 
   /**
@@ -109,14 +122,18 @@ Config.prototype = {
 
   load: function (defaults, pathname, opts) {
     var file = this.checkAvailabilityOfConfigFile(pathname);
-    var data = this.loadFile(file);
+    var data = {};
+
+    if (!this.advancedOptions || this.advancedOptions.dalekfile !== false) {
+      data = this.loadFile(file);
+    }
 
     // remove the tests property if the array length is 0
     if (opts.tests.length === 0) {
       delete opts.tests;
     }
 
-    return _.merge(defaults, data, opts);
+    return _.merge(defaults, data, opts, (this.advancedOptions || {}));
   },
 
   /**
@@ -151,8 +168,8 @@ Config.prototype = {
    * @return {object} data Parsed config data
    */
 
-  readjson: function () {
-    var contents = fs.readFileSync(this.defaultFilename + '.json', 'utf8');
+  readjson: function (pathname) {
+    var contents = fs.readFileSync((pathname || this.defaultFilename + '.json'), 'utf8');
     return JSON.parse(contents);
   },
 
@@ -163,8 +180,8 @@ Config.prototype = {
    * @return {object} data Parsed config data
    */
 
-  readjson5: function () {
-    var contents = fs.readFileSync(this.defaultFilename + '.json5', 'utf8');
+  readjson5: function (pathname) {
+    var contents = fs.readFileSync((pathname || this.defaultFilename + '.json5'), 'utf8');
     return JSON5.parse(contents);
   },
 
@@ -175,8 +192,8 @@ Config.prototype = {
    * @return {object} data Parsed config data
    */
 
-  readyaml: function () {
-    var contents = fs.readFileSync(this.defaultFilename + '.yml', 'utf8');
+  readyml: function (pathname) {
+    var contents = fs.readFileSync((pathname || this.defaultFilename + '.yml'), 'utf8');
     return yaml.load(contents);
   },
 
@@ -187,9 +204,8 @@ Config.prototype = {
    * @return {object} data Parsed config data
    */
 
-  readjs: function () {
-    var fn = require(this.defaultFilename, 'utf8');
-    return fn();
+  readjs: function (pathname) {
+    return require((pathname || this.defaultFilename));
   },
 
   /**
@@ -199,9 +215,8 @@ Config.prototype = {
    * @return {object} data Parsed config data
    */
 
-  readcoffee: function () {
-    var fn = require(this.defaultFilename, 'utf8');
-    return fn();
+  readcoffee: function (pathname) {
+    return require((pathname || this.defaultFilename));
   },
 
   /**
