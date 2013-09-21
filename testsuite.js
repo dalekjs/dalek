@@ -26,6 +26,7 @@
 
 // ext. libs
 var _ = require('lodash');
+var fs = require('fs');
 var EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 // int. libs
@@ -71,6 +72,8 @@ Testsuite.prototype = {
     this.reporterEmitter = options.reporterEmitter;
     this.driver = options.driver;
     this.name = options.file;
+    this.numberOfSuites = options.numberOfSuites;
+    this.error = null;
     return this;
   },
 
@@ -83,7 +86,21 @@ Testsuite.prototype = {
    */
 
   loadTestsuite: function (testfile) {
-    var suite = require(process.cwd() + '/' + testfile.replace('.js', '').replace('.coffee', ''));
+    var suite = {};
+    // catch any errors, like falsy requires & stuff
+    try {
+
+      if (fs.existsSync(process.cwd() + '/' + testfile)) {
+        suite = require(process.cwd() + '/' + testfile.replace('.js', ''));
+      } else {
+        this.error = 'Suite "' + testfile + '" does not exist. Skipping!';
+        return suite;
+      }
+    } catch (e) {
+      this.error = 'Failure loading suite "' + testfile + '". Skipping!';
+      return suite;
+    }
+
     suite._uid = _.uniqueId('Suite');
     return suite;
   },
@@ -103,11 +120,21 @@ Testsuite.prototype = {
    */
 
   testFinished: function (callback, tests) {
+    // run a function after the test, if given
+    if (this.options.afterEach) {
+      this.options.afterEach();
+    }
+
     // check if there are still tests that should be executed in this suite,
     // if so, run them
     if (this.decrementTestsToBeExecuted() > 1) {
       this.executeNextTest(tests);
       return this;
+    }
+
+    // run a function after the testsuite, if given
+    if (this.options.teardown) {
+      this.options.teardown();
     }
 
     // emit the suite started event
@@ -149,10 +176,10 @@ Testsuite.prototype = {
 
   /**
    * Returns the options of the testsuite
-   * If the suite has no options, it will return `null`
+   * If the suite has no options, it will return an empty object
    *
    * @method getOptions
-   * @return {object|null} options
+   * @return {object} options Suite options
    */
 
   getOptions: function () {
@@ -162,7 +189,7 @@ Testsuite.prototype = {
       return options;
     }
 
-    return null;
+    return {};
   },
 
   /**
@@ -212,6 +239,10 @@ Testsuite.prototype = {
     var testName = this.getNextTest(tests);
     // get the next test function
     var testFunction = this.getTest(testName);
+    // run a setup function before the test, if given
+    if (this.options.beforeEach) {
+      this.options.beforeEach();
+    }
     // generate an instance of the test & start it
     return testFunction(this.getTestInstance(testName));
   },
@@ -248,8 +279,10 @@ Testsuite.prototype = {
    */
 
   testDoesNotExist: function (options) {
-    console.error('Test "' + options.name + '" does not exist!');
-    process.exit(0);
+    if (options.name) {
+      this.reporterEmitter.emit('warning', 'Test "' + options.name + '" does not exist! Skipping.');
+    }
+    return this;
   },
 
   /**
@@ -263,6 +296,17 @@ Testsuite.prototype = {
   run: function (callback) {
     var tests = [];
 
+    // check if the suite is
+    if (this.error) {
+      this.reporterEmitter.emit('report:testsuite:started', null);
+      // emit a warning notice
+      this.reporterEmitter.emit('warning', this.error);
+      // emit the suite finished event
+      this.reporterEmitter.emit('report:testsuite:finished', null);
+      // move on to the next suite
+      callback();
+    }
+
     // extract suite name
     this.name = this.getName();
     // extract suite options
@@ -271,6 +315,13 @@ Testsuite.prototype = {
     // extract tests
     tests = this.getTests();
     this.testsToBeExecuted = this.numberOfTests = this.getNumberOfTests(tests);
+
+    // run a function before the testsuite has been launched, if given
+    if (this.options.setup) {
+      this.options.setup();
+      console.dir(test);
+    }
+
     // kickstart the test execution
     this.executeNextTest(tests);
 
