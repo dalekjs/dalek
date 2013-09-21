@@ -37,6 +37,14 @@
 var Reporter = {
 
   /**
+   * Reporters from the canary channel
+   *
+   * @param isCanary
+   */
+
+  isCanary: {},
+
+  /**
    * Checks if the requested reporter exists
    *
    * @method isReporter
@@ -52,10 +60,6 @@ var Reporter = {
         require.resolve('dalek-reporter-' + reporter + '-canary');
       } catch (e) {
         return false;
-      }
-
-      if (!this.isCanary) {
-        this.isCanary = {};
       }
 
       this.isCanary[reporter] = true;
