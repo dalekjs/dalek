@@ -58,17 +58,19 @@ var Dalek = function (opts) {
   // setup instance
   this._initialize();
 
+  // register exception handler
+  this._registerExceptionHandler();
+
   // normalize options
   this.options = this.normalizeOptions(opts);
 
-  // initiate config
-  this.config = new Config(defaults, this.options);
-
-  // check for file option, throw error if none is given
-  if (!Array.isArray(this.config.get('tests'))) {
-    console.error('No test files given');
-    process.exit(0);
+  // getting advanced options
+  if (opts && opts.advanced) {
+    this.advancedOptions = opts.advanced;
   }
+
+  // initiate config
+  this.config = new Config(defaults, this.options, this.advancedOptions);
 
   // prepare and load reporter(s)
   this._setupReporters();
@@ -81,6 +83,13 @@ var Dalek = function (opts) {
 
   // prepare driver event emitter instance
   this._setupDriverEmitter();
+
+  // check for file option, throw error if none is given
+  if (!Array.isArray(this.config.get('tests'))) {
+    this.reporterEvents.emit('error', 'No test files given!');
+    this.driverEmitter.emit('killAll');
+    process.exit(127);
+  }
 
   // init the driver instance
   this._initDriver();
@@ -104,7 +113,7 @@ Dalek.prototype = {
    * @chainable
    */
 
-  run: function () {
+  run: function (opts) {
     // start the timer to measure the execution time
     this.timer.start();
 
@@ -164,38 +173,6 @@ Dalek.prototype = {
     });
 
     return options;
-  },
-
-  /**
-   * Reports a system warning
-   *
-   * @method setWarning
-   * @param {string} type Type of the warning
-   * @param {string} message Verbose message of the warning
-   * @param {integer} code Error code of the warning
-   * @param {string} value Custom error message
-   * @chainable
-   */
-
-  setWarning: function (type, message, code, value) {
-    this.warnings.push({type: type, message: message, code: code, value: value});
-    return this;
-  },
-
-  /**
-   * Reports a system error
-   *
-   * @method setError
-   * @param {string} type Type of the error
-   * @param {string} message Verbose message of the error
-   * @param {integer} code Error code of the error
-   * @param {string} value Custom error message
-   * @chainable
-   */
-
-  setError: function (type, message, code, value) {
-    this.errors.push({type: type, message: message, code: code, value: value});
-    return this;
   },
 
   /**
@@ -297,8 +274,31 @@ Dalek.prototype = {
 
   _setupDriverEmitter: function () {
     var driverEmitter = new EventEmitter2();
-    driverEmitter.setMaxListeners(1000);
+    driverEmitter.setMaxListeners(0);
     this.driverEmitter = driverEmitter;
+    return this;
+  },
+
+  /**
+   * Make sure to shutdown dalek & its spawned
+   * components, webservers gracefully if a
+   * runtimew error pops up
+   *
+   * @method _registerExceptionHandler
+   * @private
+   * @chainable
+   */
+
+  _registerExceptionHandler: function () {
+    process.on('uncaughtException', function (exception) {
+      // ios emulator hack, needs to go in the future
+      if (exception.message && exception.message.search('This socket has been ended by the other party') !== -1) {
+        return false;
+      }
+      
+      this.driverEmitter.emit('killAll');
+      this.reporterEvents.emit('error', exception);
+    }.bind(this));
     return this;
   }
 };
