@@ -113,7 +113,7 @@ Dalek.prototype = {
    * @chainable
    */
 
-  run: function (opts) {
+  run: function () {
     // start the timer to measure the execution time
     this.timer.start();
 

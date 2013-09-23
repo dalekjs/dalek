@@ -2,6 +2,9 @@
 module.exports = function(grunt) {
   'use strict';
 
+  // check task runtime
+  require('time-grunt')(grunt);
+
   grunt.initConfig({
 
     // load module meta data
@@ -20,6 +23,12 @@ module.exports = function(grunt) {
       coverage: ['coverage', 'report/coverage'],
       report: ['report/complexity', 'report/api', 'report/docs'],
       reportZip: ['report.zip']
+    },
+
+    // speed up build by defining concurrent tasks
+    concurrent: {
+      test: ['lint', 'mochaTest', 'complexity'],
+      docs: ['plato', 'yuidoc']
     },
 
     // linting
@@ -317,20 +326,12 @@ module.exports = function(grunt) {
   });
 
   // load 3rd party tasks
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-yuidoc');
-  grunt.loadNpmTasks('grunt-contrib-compress');
-  grunt.loadNpmTasks('grunt-git-contributors');
-  grunt.loadNpmTasks('grunt-mocha-test');
-  grunt.loadNpmTasks('grunt-complexity');
-  grunt.loadNpmTasks('grunt-plato');
-  grunt.loadNpmTasks('grunt-bump');
+  require('load-grunt-tasks')(grunt);
 
   // define runner tasks
   grunt.registerTask('lint', 'jshint');
-  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'lint', 'mochaTest', 'generateCoverageBadge', 'complexity']);
-  grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'plato', 'yuidoc', 'compress']);
+  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'concurrent:test', 'generateCoverageBadge']);
+  grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'concurrent:docs', 'compress']);
   grunt.registerTask('all', ['clean', 'test', 'docs']);
 
 };
