@@ -85,6 +85,8 @@ Config.prototype = {
    * @method _checkFile
    * @param {String} previousValue Last iterations result
    * @param {String} ext File extension to check
+   * @param {integer} idx Iteration index
+   * @param {object} data File data
    * @return {String} config File path
    * @private
    */
@@ -99,8 +101,22 @@ Config.prototype = {
       return fs.realpathSync(fileToCheck);
     }
 
+    return this._checkDefaultFile(ext, data);
+  },
+
+  /**
+   * Iterator function that checks the existance of a the default file
+   *
+   * @method _checkDefaultFile
+   * @param {String} ext File extension to check
+   * @param {object} data File data
+   * @return {String} config File path
+   * @private
+   */
+
+  _checkDefaultFile: function (ext, data) {
     if (ext === data[data.length - 1]) {
-      fileToCheck = this.defaultFilename + '.' + ext;
+      var fileToCheck = this.defaultFilename + '.' + ext;
       if (fs.existsSync(fileToCheck)) {
         return fs.realpathSync(fileToCheck);
       }
