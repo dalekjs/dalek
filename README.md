@@ -14,7 +14,7 @@ dalekjs
 [![NPM](https://nodei.co/npm/dalekjs.png)](https://nodei.co/npm/dalekjs/)
 [![NPM](https://nodei.co/npm-dl/dalekjs.png)](https://nodei.co/npm/dalekjs/)
 
-## Ressources
+## Resources
 
 [API Docs](http://dalekjs.com/package/dalek/master/api/index.html) -
 [Trello](https://trello.com/b/gA1A6RZW/dalekjs) -
