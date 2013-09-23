@@ -1,6 +1,6 @@
 {
   "name": "dalekjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A node based cross browser testing tool",
   "main": "./index.js",
   "directories": {
