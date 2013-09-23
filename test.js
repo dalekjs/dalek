@@ -88,13 +88,23 @@ Test.prototype = {
     return this;
   },
 
+  /**
+   * Global data store (works between the node & browser envs)
+   *
+   * @method expect
+   * @param {string|number} key Key to store or fetch data
+   * @param {mixed} value *optional* Data that should be stored
+   * @return {mixed} Data that has been stored
+   * @chainable
+   */
+
   data: function (key, value) {
     if (value) {
       this.contextVars[key] = value;
       return this;
     }
 
-    return function () { return this.contextVars[key] || null; }.bind(this);
+    return this.contextVars[key];
   },
 
   /**
