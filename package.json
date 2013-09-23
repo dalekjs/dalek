@@ -10,13 +10,13 @@
   "dependencies": {
     "async": "~0.2.9",
     "eventemitter2": "~0.4.13",
-    "dalek-internal-driver": "~0.0.1",
-    "dalek-internal-config": "~0.0.1",
-    "dalek-internal-reporter": "~0.0.1",
-    "dalek-internal-timer": "~0.0.1",
-    "dalek-driver-native": "~0.0.1",
-    "dalek-reporter-console": "~0.0.1",
-    "dalek-browser-phantomjs": "~0.0.1"
+    "dalek-internal-driver": "~0.0.2",
+    "dalek-internal-config": "~0.0.2",
+    "dalek-internal-reporter": "~0.0.2",
+    "dalek-internal-timer": "~0.0.2",
+    "dalek-driver-native": "~0.0.2",
+    "dalek-reporter-console": "~0.0.2",
+    "dalek-browser-phantomjs": "~0.0.2"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
