@@ -21,13 +21,9 @@ describe('dalek', function () {
       reporter: [],
       browser: [],
       logLevel: 1,
-      noColors: false,
+      noColors: true,
       noSymbols: false,
       advanced: true
-    });
-
-    dalek.reporterEvents.on('error', function (message) {
-      expect(message).to.equal('No test files given!');
     });
 
     dalek.driverEmitter.on('killAll', function () {
@@ -152,6 +148,42 @@ describe('dalek', function () {
       expect(true).to.be.true;
     });
     dalek.run();
+  });
+
+  it('can catch runtime errors', function () {
+    var dalek = new Dalek({
+      tests: ['test/dalek/basic.js'],
+      driver: [],
+      reporter: [],
+      browser: [],
+      logLevel: 1,
+      noColors: false,
+      noSymbols: false
+    });
+
+    dalek.driverEmitter.on('killAll', function () {
+      expect(true).to.be.true;
+    });
+
+    try {
+      dalek._shutdown({});
+    } catch (e) {}
+  });
+
+  it('can doenst fire at appium runtime errors', function () {
+    var dalek = new Dalek({
+      tests: ['test/dalek/basic.js'],
+      driver: [],
+      reporter: [],
+      browser: [],
+      logLevel: 1,
+      noColors: false,
+      noSymbols: false
+    });
+
+    try {
+      expect(dalek._shutdown({message: 'This socket has been ended by the other party'})).to.be.false;
+    } catch (e) {}
   });
 
 });
