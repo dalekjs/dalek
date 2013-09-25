@@ -15,7 +15,7 @@
     "dalek-internal-reporter": "~0.0.2",
     "dalek-internal-timer": "~0.0.2",
     "dalek-driver-native": "~0.0.3",
-    "dalek-reporter-console": "~0.0.3",
+    "dalek-reporter-console": "~0.0.4",
     "dalek-browser-phantomjs": "~0.0.3"
   },
   "devDependencies": {
