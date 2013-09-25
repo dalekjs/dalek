@@ -401,6 +401,11 @@ module.exports = function (opts) {
   test.assert.$ = test.query.bind(test.assert);
   test.end = test.assert.end.bind(test.assert);
 
+  // copy log methods
+  test.log = {};
+  test.log.dom = test.logger.dom.bind(test);
+  test.log.message = test.logger.message.bind(test);
+
   // copy assertions methods
   test = test._inheritAssertions(test);
 
