@@ -16,7 +16,7 @@
     "dalek-internal-timer": "~0.0.2",
     "dalek-driver-native": "~0.0.3",
     "dalek-reporter-console": "~0.0.3",
-    "dalek-browser-phantomjs": "~0.0.2"
+    "dalek-browser-phantomjs": "~0.0.3"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
