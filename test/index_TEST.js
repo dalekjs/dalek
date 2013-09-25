@@ -14,7 +14,7 @@ describe('dalek', function () {
     process.exit = function (code) {
       expect(code).to.equal(127);
     };
-    var EventEmitter = require('events').EventEmitter;
+
     var dalek = new Dalek({
       tests: '',
       driver: [],
