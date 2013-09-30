@@ -72,6 +72,11 @@ var Dalek = function (opts) {
   // initiate config
   this.config = new Config(defaults, this.options, this.advancedOptions);
 
+  // override tests if provided on the commandline
+  if (this.options.tests) {
+    this.config.config.tests = this.options.tests;
+  }
+
   // prepare and load reporter(s)
   this._setupReporters();
 
