@@ -147,8 +147,13 @@ Driver.prototype = {
    * @return {object} browserConfiguration Browser driver isntance and configuration meta data
    */
 
-  loadBrowserConfiguration: function (browser, browsers) {
+  loadBrowserConfiguration: function (browser, browsers, driver) {
     var browserConfiguration;
+
+    if (driver.dummyBrowser && driver.dummyBrowser()) {
+      return driver.getBrowser(driver);
+    }
+
     try {
       browserConfiguration = this.getDefaultBrowserConfiguration(browser, browsers);
     } catch (e) {
@@ -321,9 +326,8 @@ Driver.prototype = {
       browsers = browsersRaw[0];
     }
 
-    var browserConfiguration = this.loadBrowserConfiguration(browser, browsers);
+    var browserConfiguration = this.loadBrowserConfiguration(browser, browsers, driverModule);
     var driverInstance = driverModule.create({events: this.driverEmitter, reporter: this.reporterEvents, browser: browser, config: this.config, browserMo: browserConfiguration.module, browserConf: browserConfiguration.configuration});
-
     // couple driver & session status events for the reporter
     this.coupleReporterEvents(driverName, browser);
 
