@@ -10,12 +10,12 @@
   "dependencies": {
     "async": "~0.2.9",
     "eventemitter2": "~0.4.13",
-    "dalek-internal-driver": "~0.0.4",
+    "dalek-internal-driver": "~0.0.5",
     "dalek-internal-config": "~0.0.2",
     "dalek-internal-reporter": "~0.0.2",
     "dalek-internal-timer": "~0.0.2",
-    "dalek-driver-native": "~0.0.3",
-    "dalek-reporter-console": "~0.0.4",
+    "dalek-driver-native": "~0.0.4",
+    "dalek-reporter-console": "~0.0.5",
     "dalek-browser-phantomjs": "~0.0.3"
   },
   "devDependencies": {
@@ -29,11 +29,11 @@
     "grunt-plato": "~0.2.1",
     "grunt-git-contributors": "~0.1.4",
     "grunt-conventional-changelog": "~1.0.0",
-    "grunt-concurrent": "~0.3.1",    
+    "grunt-concurrent": "~0.4.1",    
     "grunt-bump": "~0.0.11",    
-    "grunt-include-replace": "~1.1.0",
+    "grunt-include-replace": "~1.1.1",
     "blanket": "~1.1.5",
-    "chai": "~1.8.0",
+    "chai": "~1.8.1",
     "load-grunt-tasks": "~0.1.0",
     "time-grunt": "~0.1.1"    
   },
