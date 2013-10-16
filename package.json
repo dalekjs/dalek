@@ -32,10 +32,11 @@
     "grunt-concurrent": "~0.4.1",    
     "grunt-bump": "~0.0.11",    
     "grunt-include-replace": "~1.1.1",
+    "dalek-build-tools": "~0.0.1",
     "blanket": "~1.1.5",
     "chai": "~1.8.1",
     "load-grunt-tasks": "~0.1.0",
-    "time-grunt": "~0.1.1"    
+    "time-grunt": "~0.1.1"
   },
   "scripts": {
     "test": "grunt test"
