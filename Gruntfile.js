@@ -97,8 +97,8 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', 'jshint');
 
   // split test & docs for speed
-  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'concurrent:test', 'generateCoverageBadge']);
-  grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'concurrent:docs', 'compress']);
+  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'lint', 'mochaTest', 'complexity', 'generateCoverageBadge']);
+  grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'plato', 'yuidoc', 'compress']);
 
   // release tasks
   grunt.registerTask('releasePatch', ['test', 'bump-before:patch', 'contributors', 'changelog', 'bump-release:patch']);
