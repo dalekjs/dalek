@@ -89,23 +89,23 @@ module.exports = function(grunt) {
 
   });
 
-  // load 3rd party tasks
-  require('load-grunt-tasks')(grunt);
-  grunt.loadTasks('./node_modules/dalek-build-tools/tasks');
-
-  // define runner tasks
-  grunt.registerTask('lint', 'jshint');
-
-  // split test & docs for speed
-  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'lint', 'mochaTest', 'complexity', 'generateCoverageBadge']);
-  grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'plato', 'yuidoc', 'compress']);
-
-  // release tasks
-  grunt.registerTask('releasePatch', ['test', 'bump-before:patch', 'contributors', 'changelog', 'bump-release:patch']);
-  grunt.registerTask('releaseMinor', ['test', 'bump-before:minor', 'contributors', 'changelog', 'bump-release:minor']);
-  grunt.registerTask('releaseMajor', ['test', 'bump-before:major', 'contributors', 'changelog', 'bump-release:major']);
-
-  // clean, test, generate docs (the CI task)
-  grunt.registerTask('all', ['clean', 'test', 'docs']);
+   // load 3rd party tasks
+   require('load-grunt-tasks')(grunt);
++  grunt.loadTasks('./node_modules/dalek-build-tools/tasks');
+ 
+   // define runner tasks
+   grunt.registerTask('lint', 'jshint');
++
++  // split test & docs for speed
+   grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'concurrent:test', 'generateCoverageBadge']);
+   grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'concurrent:docs', 'compress']);
++
++  // release tasks
++  grunt.registerTask('releasePatch', ['test', 'bump-before:patch', 'contributors', 'changelog', 'bump-release:patch']);
++  grunt.registerTask('releaseMinor', ['test', 'bump-before:minor', 'contributors', 'changelog', 'bump-release:minor']);
++  grunt.registerTask('releaseMajor', ['test', 'bump-before:major', 'contributors', 'changelog', 'bump-release:major']);
++
++  // clean, test, generate docs (the CI task)
+   grunt.registerTask('all', ['clean', 'test', 'docs']);
 
 };
