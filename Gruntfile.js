@@ -81,7 +81,7 @@ module.exports = function(grunt) {
 
     // list requires that need to be changed
     // for generating a canary build
-    releaseCanary: {
+    'release-canary': {
       options: {
         files: ['index.js']
       }
