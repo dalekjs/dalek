@@ -1,5 +1,5 @@
-<a name="v0.0.7"></a>
-### v0.0.7 (2013-10-15)
+<a name="v0.0.6"></a>
+### v0.0.6 (2013-10-15)
 
 #### Features
 
@@ -11,8 +11,8 @@
 * **core:**
   * Added fix for issue #1 of dalek-internal-config ([7ca7df5](https://github.com/dalekjs/dalek/commit/7ca7df54cc44ccc91ae2d8b797d915962c857042))
 
-<a name="v0.0.6"></a>
-### v0.0.6 (2013-09-26)
+<a name="v0.0.5"></a>
+### v0.0.5 (2013-09-26)
 
 #### Features
 
@@ -25,21 +25,13 @@
 * **core:**
   * fix issue with reload() not working ([b221e77](https://github.com/dalekjs/dalek/commit/b221e77b6f5f27af74403330cce7f623164852a0))
 
-<a name="v0.0.5"></a>
-### v0.0.5 (2013-09-25)
-
-#### Features
-
-* **core:**
-  * bumping console reporter dependency ([6325a7a](https://github.com/dalekjs/dalek/commit/6325a7a0f04c5fda7cac1c6e172453fdf59530d2))
-
 <a name="v0.0.4"></a>
 ### v0.0.4 (2013-09-25)
 
 #### Features
 
 * **core:**
-  * bumping phantom dependency ([b173fce](https://github.com/dalekjs/dalek/commit/b173fce963275102b42ce9ca322fb797981c373e))
+  * bumping console reporter dependency ([6325a7a](https://github.com/dalekjs/dalek/commit/6325a7a0f04c5fda7cac1c6e172453fdf59530d2))
 
 <a name="v0.0.3"></a>
 ### v0.0.3 (2013-09-25)
@@ -47,10 +39,18 @@
 #### Features
 
 * **core:**
-  * bumping dependencies ([5bd3a7b](https://github.com/dalekjs/dalek/commit/5bd3a7be590ed58e3972c6ae6aab0731567a44e5))
+  * bumping phantom dependency ([b173fce](https://github.com/dalekjs/dalek/commit/b173fce963275102b42ce9ca322fb797981c373e))
 
 <a name="v0.0.2"></a>
-### v0.0.2 (2013-09-23)
+### v0.0.2 (2013-09-25)
+
+#### Features
+
+* **core:**
+  * bumping dependencies ([5bd3a7b](https://github.com/dalekjs/dalek/commit/5bd3a7be590ed58e3972c6ae6aab0731567a44e5))
+
+<a name="v0.0.1"></a>
+### v0.0.1 (2013-09-23)
 
 #### Bug Fixes
 
