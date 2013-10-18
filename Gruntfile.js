@@ -15,10 +15,10 @@ module.exports = function(grunt) {
 
     // define a src set of files for other tasks
     src: {
-      lint: ['Gruntfile.js', 'index.js', 'test/*.js'],
-      complexity: ['index.js'],
-      test: ['test/*.js'],
-      src: ['index.js']
+      lint: ['Gruntfile.js', 'lib/**/*.js', 'test/*.js'],
+      complexity: ['lib/**/*.js'],
+      test: ['test/*TEST.js'],
+      src: ['lib/dalek.js']
     },
 
     // clean automatically generated helper files & docs
@@ -62,11 +62,27 @@ module.exports = function(grunt) {
           'report/coverage',
           'report/complexity',
           'report/complexity/files',
-          'report/complexity/files/index_js'
+          'report/complexity/files/_js',
+          'report/complexity/files/_actions_js',
+          'report/complexity/files/_assertions_js',
+          'report/complexity/files/_reporter_js',
+          'report/complexity/files/_config_js',
+          'report/complexity/files/_driver_js',
+          'report/complexity/files/_test_js',
+          'report/complexity/files/_testsuite_js',
+          'report/complexity/files/_timer_js',
         ],
         files: [
           'report.history.json',
-          'files/index_js/report.history.json'
+          'files/_js/report.history.json',
+          'files/_actions_js/report.history.json',
+          'files/_assertions_js/report.history.json',
+          'files/_reporter_js/report.history.json',
+          'files/_config_js/report.history.json',
+          'files/_driver_js/report.history.json',
+          'files/_test_js/report.history.json',
+          'files/_testsuite_js/report.history.json',
+          'files/_timer_js/report.history.json',
         ]
       }
     },
@@ -75,15 +91,7 @@ module.exports = function(grunt) {
     prepareCoverage: {
       options: {
         folders: ['coverage', 'report', 'report/coverage'],
-        pattern: '[require("fs").realpathSync(__dirname + "/../index.js")]'
-      }
-    },
-
-    // list requires that need to be changed
-    // for generating a canary build
-    'release-canary': {
-      options: {
-        files: ['index.js']
+        pattern: '[require("fs").realpathSync(__dirname + "/../lib/dalek.js"), require("fs").realpathSync(__dirname + "/../lib/dalek/")]'
       }
     }
 
