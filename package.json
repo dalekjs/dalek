@@ -11,9 +11,6 @@
     "async": "~0.2.9",
     "eventemitter2": "~0.4.13",
     "dalek-internal-driver": "~0.0.5",
-    "dalek-internal-config": "~0.0.2",
-    "dalek-internal-reporter": "~0.0.2",
-    "dalek-internal-timer": "~0.0.2",
     "dalek-driver-native": "~0.0.4",
     "dalek-reporter-console": "~0.0.5",
     "dalek-browser-phantomjs": "~0.0.3"
