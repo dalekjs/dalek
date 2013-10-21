@@ -93,19 +93,66 @@ module.exports = function(grunt) {
         folders: ['coverage', 'report', 'report/coverage'],
         pattern: '[require("fs").realpathSync(__dirname + "/../lib/dalek.js"), require("fs").realpathSync(__dirname + "/../lib/dalek/")]'
       }
-    }
+    },
+
+    // user docs
+    documantix: {
+      options: {
+        header: 'dalekjs/dalekjs.com/master/assets/header.html',
+        footer: 'dalekjs/dalekjs.com/master/assets/footer.html',
+        target: 'report/docs'
+      },
+
+      // actions
+      actions: {
+        src: ['lib/dalek/actions.js'],
+        options: {
+          vars: {
+            title: 'DalekJS - Documentation - Actions',
+            desc: 'DalekJS - Documentation - Actions',
+            docs: true
+          }
+        }
+      },
+
+      // assertions
+      assertions: {
+        src: ['lib/dalek/assertions.js'],
+        options: {
+          vars: {
+            title: 'DalekJS - Documentation - Actions',
+            desc: 'DalekJS - Documentation - Actions',
+            docs: true
+          }
+        }
+      },
+
+      // config
+      config: {
+        src: ['lib/dalek/config.js'],
+        options: {
+          vars: {
+            title: 'DalekJS - Documentation - Config',
+            desc: 'DalekJS - Documentation - Config',
+            docs: true
+          }
+        }
+      },
+
+    }  
 
   });
 
   // load 3rd party tasks
   require('load-grunt-tasks')(grunt);
   grunt.loadTasks('./node_modules/dalek-build-tools/tasks');
+  grunt.loadNpmTasks('grunt-documantix');
 
   // define runner tasks
   grunt.registerTask('lint', 'jshint');
   
   // split test & docs for speed
-  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'concurrent:test', 'generateCoverageBadge']);
+  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'concurrent:test', 'documantix', 'generateCoverageBadge']);
   grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'concurrent:docs', 'compress']);
   
   // release tasks
