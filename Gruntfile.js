@@ -139,7 +139,7 @@ module.exports = function(grunt) {
         }
       },
 
-    }
+    },
 
     // archive docs
     archive: {
