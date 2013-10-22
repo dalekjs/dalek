@@ -146,6 +146,13 @@ module.exports = function(grunt) {
       options: {
         files: ['config.html', 'actions.html', 'assertions.html']
       }
+    },
+
+    // release canary version
+    'release-canary': {
+      options: {
+        files: []
+      }
     }
 
   });
