@@ -23,7 +23,7 @@ describe('dalek-internal-timer', function () {
     expect(timer.timerData[1]).to.be.above(0);
   });
 
-  it('can be stopped', function (done) {
+  /*it('can be stopped', function (done) {
     var timer = new Timer();
     timer.start();
     expect(timer.interval[0]).to.equal(0);
@@ -35,7 +35,7 @@ describe('dalek-internal-timer', function () {
     }, 200);
   });
 
-  /*it('can return elapsed time in seconds', function () {
+  it('can return elapsed time in seconds', function () {
     var timer = new Timer();
     timer.interval = [0, 100769];
     expect(timer.getElapsedTime()).to.be.above(1);
