@@ -144,7 +144,7 @@ module.exports = function(grunt) {
     // archive docs
     archive: {
       options: {
-        files: ['report/docs/config.html', 'report/docs/actions.html', 'report/docs/assertions.html']
+        files: ['config.html', 'actions.html', 'assertions.html']
       }
     }
 
