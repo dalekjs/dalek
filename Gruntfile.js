@@ -141,6 +141,13 @@ module.exports = function(grunt) {
 
     }
 
+    // archive docs
+    archive: {
+      options: {
+        files: ['report/docs/config.html', 'report/docs/actions.html', 'report/docs/assertions.html']
+      }
+    }
+
   });
 
   // load 3rd party tasks
