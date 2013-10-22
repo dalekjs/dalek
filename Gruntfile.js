@@ -95,6 +95,19 @@ module.exports = function(grunt) {
       }
     },
 
+    // add current timestamp to the html document
+    includereplace: {
+      dist: {
+        options: {
+          globals: {
+            timestamp: '<%= grunt.template.today("dddd, mmmm dS, yyyy, h:MM:ss TT") %>'
+          },
+        },
+        src: 'report/docs/*.html',
+        dest: '.'
+      }
+    },
+
     // user docs
     documantix: {
       options: {
