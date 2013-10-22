@@ -16,10 +16,10 @@ dalekjs
 
 ## Resources
 
-[API Docs](http://dalekjs.com/package/dalek/master/api/index.html) -
+[API Docs](http://dalekjs.com/package/dalekjs/master/api/index.html) -
 [Trello](https://trello.com/b/gA1A6RZW/dalekjs) -
-[Code coverage](http://dalekjs.com/package/dalek/master/coverage/index.html) -
-[Code complexity](http://dalekjs.com/package/dalek/master/complexity/index.html) -
+[Code coverage](http://dalekjs.com/package/dalekjs/master/coverage/index.html) -
+[Code complexity](http://dalekjs.com/package/dalekjs/master/complexity/index.html) -
 [Contributing](https://github.com/dalekjs/dalek/blob/master/CONTRIBUTING.md) -
 [User Docs](http://dalekjs.com/pages/getStarted.html) -
 [Homepage](http://dalekjs.com) -
