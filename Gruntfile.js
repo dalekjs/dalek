@@ -69,7 +69,7 @@ module.exports = function(grunt) {
           'report/complexity/files/_config_js',
           'report/complexity/files/_driver_js',
           'report/complexity/files/_test_js',
-          'report/complexity/files/_testsuite_js',
+          'report/complexity/files/_suite_js',
           'report/complexity/files/_timer_js',
         ],
         files: [
@@ -81,7 +81,7 @@ module.exports = function(grunt) {
           'files/_config_js/report.history.json',
           'files/_driver_js/report.history.json',
           'files/_test_js/report.history.json',
-          'files/_testsuite_js/report.history.json',
+          'files/_suite_js/report.history.json',
           'files/_timer_js/report.history.json',
         ]
       }
