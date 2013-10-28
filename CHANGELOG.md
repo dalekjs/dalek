@@ -1,3 +1,12 @@
+<a name="v0.0.7"></a>
+### v0.0.7 (2013-10-28)
+
+
+#### Features
+
+* **config:** Moved config.js form dalek-internal-config into dalek main module ([a0dadca5](http://github.com/dalekjs/dalek/commit/a0dadca50282dddd52758051cb95a77ef0309894))
+* **core:** added remote runner/host capabilities ([77ed1ece](http://github.com/dalekjs/dalek/commit/77ed1ecea5f5b8b2556cbe7606291cb44abda37c))
+
 <a name="v0.0.6"></a>
 ### v0.0.6 (2013-10-15)
 
