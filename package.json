@@ -8,8 +8,8 @@
     "example": "examples"
   },
   "dependencies": {
-    "dalek-driver-native": "~0.0.4",
-    "dalek-reporter-console": "~0.0.5",
+    "dalek-driver-native": "~0.0.5",
+    "dalek-reporter-console": "~0.0.6",
     "dalek-browser-phantomjs": "~0.0.3",
     "q": "~0.9.7",
     "chai": "~1.8.1",
