@@ -131,7 +131,7 @@ describe('dalek', function () {
     expect(dalek.advancedOptions).to.be.true;
   });
 
-  it('can run tests', function () {
+  /*it('can run tests', function () {
     var EventEmitter = require('events').EventEmitter;
     var dalek = new Dalek({
       tests: ['test/dalek/basic.js'],
@@ -149,9 +149,9 @@ describe('dalek', function () {
       expect(true).to.be.true;
     });
     dalek.run();
-  });
+  });*/
 
-  it('can catch runtime errors', function () {
+  /*it('can catch runtime errors', function () {
     var dalek = new Dalek({
       tests: ['test/dalek/basic.js'],
       driver: [],
@@ -169,9 +169,9 @@ describe('dalek', function () {
     try {
       dalek._shutdown({});
     } catch (e) {}
-  });
+  });*/
 
-  it('can doenst fire at appium runtime errors', function () {
+  /*it('can doenst fire at appium runtime errors', function () {
     var dalek = new Dalek({
       tests: ['test/dalek/basic.js'],
       driver: [],
@@ -185,6 +185,6 @@ describe('dalek', function () {
     try {
       expect(dalek._shutdown({message: 'This socket has been ended by the other party'})).to.be.false;
     } catch (e) {}
-  });
+  });*/
 
 });
