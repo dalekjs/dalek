@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/dalekjs/dalek.png?label=ready)](https://waffle.io/dalekjs/dalek)
 dalekjs
 ======================
 
