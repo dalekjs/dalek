@@ -19,7 +19,8 @@
     "lodash": "~2.4.1",
     "js-yaml": "~3.0.1",
     "json5": "~0.2.0",
-    "coffee-script": "~1.6.3"
+    "coffee-script": "~1.6.3",
+    "glob": "3.2.8"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

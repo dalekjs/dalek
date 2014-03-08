@@ -10,6 +10,7 @@ dalekjs
 [![NPM version](https://badge.fury.io/js/dalekjs.png)](http://badge.fury.io/js/dalekjs)
 [![Coverage](http://dalekjs.com/package/dalekjs/master/coverage/coverage.png)](http://dalekjs.com/package/dalekjs/master/coverage/index.html)
 [![unstable](https://rawgithub.com/hughsk/stability-badges/master/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
+[![Stories in Ready](https://badge.waffle.io/dalekjs/dalek.png?label=ready)](https://waffle.io/dalekjs/dalek)
 
 [![NPM](https://nodei.co/npm/dalekjs.png)](https://nodei.co/npm/dalekjs/)
 [![NPM](https://nodei.co/npm-dl/dalekjs.png)](https://nodei.co/npm/dalekjs/)

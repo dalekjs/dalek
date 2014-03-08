@@ -20,3 +20,4 @@ report.zip
 /node_modules/
 /report/
 .DS_STORE
+.idea/
