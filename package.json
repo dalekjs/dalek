@@ -12,7 +12,7 @@
     "dalek-reporter-console": "~0.0.6",
     "dalek-browser-phantomjs": "~0.0.3",
     "q": "~1.0.0",
-    "chai": "~1.8.1",
+    "chai": "~1.9.0",
     "async": "~0.2.10",
     "eventemitter2": "~0.4.13",
     "cheerio": "~0.13.1",
