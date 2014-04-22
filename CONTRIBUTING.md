@@ -153,9 +153,9 @@ We're all for criticism and tearing apart DalekJS for
 the problems it has. Do it in a constructive and helpful
 manner: "There isn't a test for this scenario. Here's a
 rough idea for one that shows the problem." Tell us why
-you don't like Marionette. Tell us that someone else is
+you don't like DalekJS. Tell us that someone else is
 building something better and why that other thing fits
-your scenario and needs better than Marionette does. Just
+your scenario and needs better than DalekJS does. Just
 do it in a manner that allows us to learn from your
 experiences, instead of reacting to you being a troll
 (likely causing us to get defensive and miss an opportunity
