@@ -101,15 +101,6 @@ pull request on a topic branch. If your pull request contains
 commits or other changes that are not related to the pull
 request, we will ask you to re-do your pull request.
 
-### Branch from "wip" not "master"
-
-The "master" branch of the DalekJS repository is for
-production release code, and documentation updates only. Never
-create a pull request from the master branch. Always create
-a branch for your work from the "wip" branch. This will
-facilitate easier pull request management for the continuous
-work that is done in the dev branch.
-
 ### Submit Specs With Your Pull Request
 
 Whenever possible, submit the specs (unit tests) that
