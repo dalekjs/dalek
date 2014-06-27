@@ -1,0 +1,12 @@
+Screenshot of element and checking diffence between images
+
+Sometimes we work not with page but with only part, so we do not need screenshot of whole page. So I've added additional selector paramter to screeshot method, that allow to make screenshot only selected element. Also when we work with css refactoring we need to check that we do not modify page appearence. So I've added additional check that check screenshot with some stored etalon png image.
+My changes contains modification in two modules: 
+1. dalek-driver-native addded image lib, that rely on node-pngjs lib, that is simple pure js lib for work with png files
+2. dalek.  
+* Modified screenshot action to support selector of the element 
+* Added is screenshotIsEqualTo method that allow to check if previously created screenshot is equal to stored image, and create image diff if it necessary. 
+
+I was inspired by @stoyanstefanov post http://www.phpied.com/css-diffs-2/
+
+I'm quite new in github and open source contribution, so please let me know if I'm doing something in wrong way. 
