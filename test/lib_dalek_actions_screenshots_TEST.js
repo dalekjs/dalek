@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect;
 var EventEmitter2 = require('eventemitter2').EventEmitter2;
-var Actions = require('../lib/dalek/actions.js')({reporter: reporter});
+var Actions = require('../lib/dalek/actions.js')({reporter: null});
 
 describe('dalek-internal-screenshot-action', function() {
 
