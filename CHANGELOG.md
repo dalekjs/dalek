@@ -1,3 +1,21 @@
+<a name="0.0.8"></a>
+### 0.0.8 (2014-11-28)
+
+
+#### Bug Fixes
+
+* **actions:**
+  * before & after test execution ([d0ce489c](http://github.com/dalekjs/dalek/commit/d0ce489cb10f778df0ec9bc1576862827643a370))
+  * better screenshot handling ([ed50a6fd](http://github.com/dalekjs/dalek/commit/ed50a6fdc8b90b01566a2847ca9087689d42d777))
+* **build:** fix build process ([ff45eb3b](http://github.com/dalekjs/dalek/commit/ff45eb3bddd348aa65f3a17c8c440b13a3dd4292))
+* **tests:** removed undefined variable ([1ef624da](http://github.com/dalekjs/dalek/commit/1ef624daf6de321996daba10557a50e3e5a7dece))
+
+
+#### Features
+
+* **suite:** bind this to the current test ([37157057](http://github.com/dalekjs/dalek/commit/3715705799925dde865c36274ef05d7c7129c0da))
+
+
 <a name="v0.0.7"></a>
 ### v0.0.7 (2013-10-28)
 
