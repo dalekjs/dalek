@@ -3,14 +3,14 @@ dalekjs
 
 > DalekJS base framework
 
-[![Build Status](https://travis-ci.org/dalekjs/dalek.png)](https://travis-ci.org/dalekjs/dalek)
+[![Build Status](https://travis-ci.org/dalekjs/dalek.svg)](https://travis-ci.org/dalekjs/dalek)
 [![Build Status](https://drone.io/github.com/dalekjs/dalek/status.png)](https://drone.io/github.com/dalekjs/dalek/latest)
-[![Dependency Status](https://david-dm.org/dalekjs/dalek.png)](https://david-dm.org/dalekjs/dalek)
-[![devDependency Status](https://david-dm.org/dalekjs/dalek/dev-status.png)](https://david-dm.org/dalekjs/dalek#info=devDependencies)
-[![NPM version](https://badge.fury.io/js/dalekjs.png)](http://badge.fury.io/js/dalekjs)
+[![Dependency Status](https://david-dm.org/dalekjs/dalek.svg)](https://david-dm.org/dalekjs/dalek)
+[![devDependency Status](https://david-dm.org/dalekjs/dalek/dev-status.svg)](https://david-dm.org/dalekjs/dalek#info=devDependencies)
+[![NPM version](https://badge.fury.io/js/dalekjs.svg)](http://badge.fury.io/js/dalekjs)
 [![Coverage](http://dalekjs.com/package/dalekjs/master/coverage/coverage.png)](http://dalekjs.com/package/dalekjs/master/coverage/index.html)
 [![unstable](https://rawgithub.com/hughsk/stability-badges/master/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
-[![Stories in Ready](https://badge.waffle.io/dalekjs/dalek.png?label=ready)](https://waffle.io/dalekjs/dalek)
+[![Stories in Ready](https://badge.waffle.io/dalekjs/dalek.svg?label=ready)](https://waffle.io/dalekjs/dalek)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/dalekjs/dalek/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
