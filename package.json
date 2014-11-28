@@ -34,7 +34,7 @@
     "grunt-git-contributors": "0.1.5",
     "grunt-conventional-changelog": "1.1.0",
     "grunt-concurrent": "1.0.0",
-    "grunt-documantix": "0.0.4",
+    "grunt-documantix": "0.0.5",
     "grunt-bump": "0.0.16",
     "grunt-include-replace": "2.0.0",
     "blanket": "1.1.6",
