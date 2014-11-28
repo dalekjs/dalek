@@ -1,14 +1,16 @@
 'use strict';
 
 var expect = require('chai').expect;
-var Actions = require('../lib/dalek/actions.js')({reporter: null});
+var EventEmitter2 = require('eventemitter2').EventEmitter2;
+var Actions = require('../lib/dalek/actions.js')({reporter: reporter});
 
 describe('dalek-internal-screenshot-action', function() {
 
   var actions;
-  
+
   beforeEach(function () {
     actions = new Actions();
+    actions.reporter = new EventEmitter2();
     actions.actionPromiseQueue = [];
   });
 
