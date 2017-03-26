@@ -1,6 +1,6 @@
 {
   "name": "dalekjs",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A node based cross browser testing tool",
   "main": "./lib/dalek.js",
   "directories": {
@@ -10,7 +10,7 @@
   "dependencies": {
     "dalek-driver-native": "0.0.6",
     "dalek-reporter-console": "0.0.7",
-    "dalek-browser-phantomjs": "0.0.4",
+    "dalek-browser-phantomjs": "davide/dalek-browser-phantomjs",
     "q": "1.1.2",
     "chai": "1.9.1",
     "async": "0.9.0",
