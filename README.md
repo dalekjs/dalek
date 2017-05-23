@@ -1,3 +1,11 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+# DalekJS is not maintained any longer :cry:
+
+See https://github.com/dalekjs/dalek/issues/175
+
+---
+
 dalekjs
 ======================
 
