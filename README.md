@@ -2,7 +2,7 @@
 
 # DalekJS is not maintained any longer :cry:
 
-See https://github.com/dalekjs/dalek/issues/175
+We recommend [TestCafé](http://devexpress.github.io/testcafe/) for your automated browser testing needs.
 
 ---
 
